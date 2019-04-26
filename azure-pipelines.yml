@@ -34,8 +34,8 @@ steps:
 - script: |
      chmod +x scripts/*.py
      ls -al scripts
-     chmod +x tests/AzureDevOpsConfig/*.py
-     ls -al tests/AzureDevOpsConfig
+     chmod +x tests/ci/*.py
+     ls -al tests/ci
      pwd
      ls -al
   displayName: 'ls'
@@ -44,7 +44,7 @@ steps:
      python --version
      pip install azure-cli==2.0.46
      pip install --upgrade azureml-sdk[cli]
-     pip install -r tests/AzureDevOpsConfig/requirements.txt
+     pip install -r tests/ci/requirements.txt
   displayName: 'install cli'
 
 #- script: |
