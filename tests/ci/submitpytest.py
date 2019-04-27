@@ -37,7 +37,7 @@ import azureml.core
 #
 print("SDK Version:", azureml.core.VERSION)
 # print('current dir is ' +os.curdir)
-with open("tests/AzureDevOpsConfig/config.json") as f:
+with open("tests/ci/config.json") as f:
     config = json.load(f)
 '''
 workspace_name = config["workspace_name"]
@@ -45,10 +45,6 @@ resource_group = config["resource_group"]
 subscription_id = config["subscription_id"]
 location = config["location"]
 '''
-
-workspace_name = "RecoWS"
-resource_group = "recommender"
-subscription_id = "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324"
 
 cli_auth = AzureCliAuthentication()
 
@@ -190,7 +186,7 @@ print("before folder = .")
 project_folder = "."
 print('before ScriptRunconfig')
 script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                    script='./tests/AzureDevOpsConfig/runpytest.py',
+                                    script='./tests/ci/runpytest.py',
                                     run_config=run_config)
 
 print('before submit')
