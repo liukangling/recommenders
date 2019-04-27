@@ -63,7 +63,7 @@ steps:
 #  displayName: 'unit tests'
 
 - script: | 
-   az login --service-principal -u $(spidentity) -p $(spsecret) --tenant $(sptenant)
+   #az login --service-principal -u $(spidentity) -p $(spsecret) --tenant $(sptenant)
    
   displayName: 'Login to Azure'
 
