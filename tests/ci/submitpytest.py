@@ -36,7 +36,7 @@ import azureml.core
 # Initialize a Workspace
 #
 print("SDK Version:", azureml.core.VERSION)
-# print('current dir is ' +os.curdir)
+print('current dir is ' +os.curdir)
 with open("tests/ci/config.json") as f:
     config = json.load(f)
 '''
