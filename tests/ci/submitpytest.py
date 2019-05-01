@@ -45,6 +45,9 @@ resource_group = config["resource_group"]
 subscription_id = config["subscription_id"]
 location = config["location"]
 '''
+workspace_name = "RecoWS"
+resource_group = "recommender"
+subscription_id = "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324"
 
 cli_auth = AzureCliAuthentication()
 
