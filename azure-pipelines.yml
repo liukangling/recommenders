@@ -4,8 +4,8 @@
 # https://aka.ms/yaml
 #
 #
-variables:
-- group: AzureKeyVaultSecrets
+#variables:
+#- group: AzureKeyVaultSecrets
 
 trigger:
 - azure-pipelines-bz
@@ -62,15 +62,14 @@ steps:
 #    pytest tests/unit/test_gpu_utils.py::test_get_number_gpus
 #  displayName: 'unit tests'
 
-- script: | 
-   #az login --service-principal -u $(spidentity) -p $(spsecret) --tenant $(sptenant)
-   
-  displayName: 'Login to Azure'
+#- script: | 
+   #az login --service-principal -u $(spidentity) -p $(spsecret) --tenant $(sptenant)  
+#  displayName: 'Login to Azure'
 
-- script: |
-   sed -i 's#"subscription_id": "<>"#"subscription_id": "$(subscriptionid)"#g' tests/ci/config.json
-   
-  displayName: 'replace subscription value'
+#- script: |
+#   sed -i 's#"subscription_id": "<>"#"subscription_id": "$(subscriptionid)"#g' tests/ci/config.json
+#   
+#  displayName: 'replace subscription value'
 
 - task: AzureCLI@1
   displayName: 'Create or get workspace'
