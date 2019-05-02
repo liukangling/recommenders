@@ -75,5 +75,3 @@ steps:
     testResultsFiles: '**/test-*.xml'
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
-
-
