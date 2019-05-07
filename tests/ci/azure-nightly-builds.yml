@@ -31,6 +31,8 @@ steps:
      ls -al tests/ci
      pwd
      ls -al
+     ls -al tests/ci/smoke
+     chmod +x tests/ci/smoke/*.py
   displayName: 'ls'
 
 - script: |
