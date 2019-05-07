@@ -188,7 +188,7 @@ from azureml.core.script_run_config import ScriptRunConfig
 
 print("before folder = .")
 project_folder = "."
-print('before ScriptRunconfig')
+print('before ScriptRunconfig tests/ci/smoke')
 script_run_config = ScriptRunConfig(source_directory=project_folder,
                                     script='./tests/ci/smoke/runpytest.py',
                                     run_config=run_config)
