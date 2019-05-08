@@ -11,7 +11,7 @@ subprocess.run(["pytest","tests/unit","-m","not notebooks and not spark and gpu"
 
 import os
 print("os.listdir files", os.listdir("."))
-#r
+# set up reports
 name_of_upload = "reports"
 path_on_disk = "reports"
 run.upload_folder(name_of_upload, path_on_disk)
