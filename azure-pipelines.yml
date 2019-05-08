@@ -3,7 +3,7 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 #
-#
+# use variable group name
 variables:
 - group: AzureKeyVaultSecrets
 
@@ -20,6 +20,7 @@ steps:
     versionSpec: '3.6'
     architecture: 'x64'
   displayName: Use Python 3.6
+
 
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
