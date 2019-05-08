@@ -19,13 +19,27 @@ steps:
   inputs:
     versionSpec: '3.6'
     architecture: 'x64'
-  displayName: Use Python 3.6
+  displayName: 'Use Python 3.6'
+
+- script: 
+    az extension add -n azure-cli-ml 
+    az ml -h 
+    az ml workspace create --workspace-name RecoWS2 --exist-ok --keyvault RecommendersDevOps --resource-group recommender
+    az ml workspace show --resource-group recommender
+  displayName: 'az cli ml'
+
 
 
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
    
   displayName: 'Login to Azure'
+
+- script: 
+    az ml workspace create --workspace-name RecoWS2 --exist-ok --keyvault RecommendersDevOps --resource-group recommender
+    az ml workspace show --resource-group recommender
+  displayName: 'az ml ws'
+
 
 #- bash: |
 #    echo "##vso[task.prependpath]/data/anaconda/bin"
