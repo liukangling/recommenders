@@ -32,6 +32,12 @@ steps:
    sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
   displayName: 'replace subscription value'
 
+- script: 
+   sed -i 's#"tests/unit_or_smoke_int": "<>"#"tests/unit"#g' ./tests/ci/runpytest-template.py
+  displayName: 'replace unit or smoke or int'
+
+- script:
+    sed -i 's#"not notebooks and not spark and not gpu": "<>"#"not notebooks and not spark and not gpu"#g'
 - bash: |
     echo "##vso[task.prependpath]/data/anaconda/bin"
   displayName: Add Conda to PATH
