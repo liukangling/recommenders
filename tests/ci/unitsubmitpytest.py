@@ -49,7 +49,7 @@ print("SDK Version:", azureml.core.VERSION)
 print('current dir is ' +os.curdir)
 with open("tests/ci/config.json") as f:
     config = json.load(f)
-'''
+
 workspace_name = config["workspace_name"]
 resource_group = config["resource_group"]
 subscription_id = config["subscription_id"]
@@ -58,6 +58,7 @@ location = config["location"]
 #workspace_name = "RecoWS"
 #resource_group = "recommender"
 #subscription_id = "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324"
+'''
 print(" WS name ",workspace_name)
 print("subscription_id ",subscription_id)
 
