@@ -9,7 +9,7 @@ variables:
 
 trigger: none
 #- azure-pipelines-bz
-  - master
+#  - master
   
 pool:
  vmImage: 'ubuntu-16.04'
