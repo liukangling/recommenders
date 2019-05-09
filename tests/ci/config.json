@@ -1,6 +1,6 @@
 {
-    "subscription_id": "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324",
+    "subscription_id": "<>",
     "resource_group": "recommender",
     "workspace_name": "RecoWS",
-    "location": "southcentralus"
+    "location": "eastus"
 }
