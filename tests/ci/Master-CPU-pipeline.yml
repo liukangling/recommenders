@@ -7,7 +7,7 @@
 variables:
 - group: AzureKeyVaultSecrets
 
-trigger:
+trigger: none
 #- azure-pipelines-bz
   - master
   
@@ -32,11 +32,11 @@ steps:
   displayName: 'replace subscription value'
 
 - script: 
-   sed -i 's#"tests/unit_or_smoke_int": "<>"#"tests/unit"#g' ./tests/ci/runpytest-template.py
+   sed -i 's#"tests/unit_or_smoke_int"#"tests/unit"#g' ./tests/ci/runpytest-template.py
   displayName: 'replace unit or smoke or int'
 
 - script:
-    sed -i 's#"not notebooks and not spark and not gpu": "<>"#"not notebooks and not spark and not gpu"#g'
+    sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest-template.py
   displayName: 'notebooks and spark and gpu'
 
 
