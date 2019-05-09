@@ -7,9 +7,10 @@
 variables:
 - group: AzureKeyVaultSecrets
 
-#trigger:
+trigger:
 #- azure-pipelines-bz
-
+  - master
+  
 pool:
  vmImage: 'ubuntu-16.04'
 
@@ -29,7 +30,6 @@ steps:
 
 - script: |
    sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
-   more ./tests/ci/config.json
   displayName: 'replace subscription value'
 
 - bash: |
@@ -79,6 +79,7 @@ steps:
     azureSubscription: 'AzureML Nursery (15ae9cb6-95c1-483d-a0e3-b1a1a3b06324)'
     scriptLocation: inlineScript
     inlineScript: 'python tests/ci/unitsubmitpytest.py'
+    arguments: './tests/ci/unitrunpytest.py'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/test-*.xml'
