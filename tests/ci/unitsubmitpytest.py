@@ -110,7 +110,7 @@ compute_min_nodes = os.environ.get("AML_COMPUTE_CLUSTER_MIN_NODES", 0)
 compute_max_nodes = os.environ.get("AML_COMPUTE_CLUSTER_MAX_NODES", 4)
 
 # CPU VM = STANDARD_D2_V2. For using GPU VM, set SKU to STANDARD_NC6 
-vm_size = os.environ.get("AML_COMPUTE_CLUSTER_SKU", "STANDARD_NC6")
+vm_size = os.environ.get("AML_COMPUTE_CLUSTER_SKU", "STANDARD_D2_V2")
 
 
 if compute_name in ws.compute_targets:
@@ -152,7 +152,7 @@ run_config.target = "amlcompute"
 # Set vm size for AmlCompute
 # chosen from STANDARD_D2_V2 or STANDARD_NC6
 
-run_config.amlcompute.vm_size = 'STANDARD_NC6'
+run_config.amlcompute.vm_size = 'STANDARD_D2_V2'
 
 
 # Do NOT enable Docker 
@@ -162,7 +162,7 @@ run_config.environment.docker.enabled = True
 
 #run_config.environment.docker.base_image = DEFAULT_CPU_IMAGE
 # just to see if this is it bz
-run_config.environment.docker.base_image = DEFAULT_GPU_IMAGE
+run_config.environment.docker.base_image = DEFAULT_CPU_IMAGE
 
 #run_config.environment.docker.base_image = 'continuumio/miniconda3'
 
@@ -174,12 +174,12 @@ run_config.auto_prepare_environment = True
 
 import os
 
-print("reco*.yaml path")
-print(os.path.dirname('./reco*.yaml'))
-print('reco*.yaml exists ',os.path.exists('./reco*.yaml'))
+print("reco_base.yaml path")
+print(os.path.dirname('./reco_base.yaml'))
+print('reco_base.yaml exists ',os.path.exists('./reco_base.yaml'))
 
 # specify CondaDependencies obj
-run_config.environment.python.conda_dependencies = CondaDependencies(conda_dependencies_file_path='./reco_gpu.yaml')
+run_config.environment.python.conda_dependencies = CondaDependencies(conda_dependencies_file_path='./reco_base.yaml')
 
 print("before import ScriptRunConfig")
 
@@ -190,7 +190,7 @@ print("before folder = .")
 project_folder = "."
 print('before ScriptRunconfig')
 script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                    script='./tests/ci/runpytest.py',
+                                    script='./tests/ci/unitrunpytest.py',
                                     run_config=run_config)
 
 print('before submit')
