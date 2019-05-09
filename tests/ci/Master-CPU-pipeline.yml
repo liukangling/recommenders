@@ -25,7 +25,6 @@ steps:
 
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-   
   displayName: 'Login to Azure'
 
 - script: |
@@ -38,60 +37,6 @@ steps:
 
 - script:
     sed -i 's#"not notebooks and not spark and not gpu": "<>"#"not notebooks and not spark and not gpu"#g'
-- bash: |
-    echo "##vso[task.prependpath]/data/anaconda/bin"
-  displayName: Add Conda to PATH
+  displayName: 'notebooks and spark and gpu'
 
-- script: 'pip install azureml-sdk'
-  displayName: 'Prepare Conda Environment (using yml)'
-  continueOnError: true
-  
-- script: 
-     python scripts/generate_conda_file.py
-  displayName: ' generate_conda_file.py'
 
-- script: |
-     chmod +x scripts/*.py
-     ls -al scripts
-     chmod +x tests/ci/*.py
-     ls -al tests/ci
-     pwd
-     ls -al
-  displayName: 'ls'
-
-- script: |
-     python --version
-     pip install azure-cli==2.0.46
-     pip install --upgrade azureml-sdk[cli]
-     pip install -r tests/ci/requirements.txt
-  displayName: 'install cli'
-
-- task: AzureCLI@1
-  displayName: 'Create or get workspace'
-  inputs:
-    azureSubscription: 'AzureML Nursery (15ae9cb6-95c1-483d-a0e3-b1a1a3b06324)'
-    scriptLocation: inlineScript
-    inlineScript: 'python tests/ci/unitsubmitpytest.py'
-    arguments: './tests/ci/unitrunpytest.py'
-
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/test-*.xml'
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    failTaskOnFailedTests: true
-  condition: succeededOrFailed()
-
-- task: AzureCLI@1
-  displayName: 'Create or get workspace'
-  inputs:
-    azureSubscription: 'AzureML Nursery (15ae9cb6-95c1-483d-a0e3-b1a1a3b06324)'
-    scriptLocation: inlineScript
-    inlineScript: 'python tests/ci/unitsubmitpytest.py'
-    arguments: './tests/ci/unitrunpytest.py'
-
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/test-*.xml'
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    failTaskOnFailedTests: true
-  condition: succeededOrFailed()
