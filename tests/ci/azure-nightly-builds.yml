@@ -1,5 +1,5 @@
-trigger:
-- azure-pipelines-bz
+#trigger:
+#- azure-pipelines-bz
 
 pool:
  vmImage: 'ubuntu-16.04'
