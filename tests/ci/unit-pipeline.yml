@@ -29,7 +29,6 @@ steps:
 
 - script: |
    sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
-   more ./tests/ci/config.json
   displayName: 'replace subscription value'
 
 - bash: |
