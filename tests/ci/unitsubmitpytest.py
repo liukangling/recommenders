@@ -28,6 +28,9 @@ print("This is the name of the script: ", sys.argv[0])
 print("Number of arguments: ", len(sys.argv))
 print("The arguments are: " , str(sys.argv))
 
+pytest_str = sys.argv[1]
+print("pytest_str ",pytest_str)
+
 from azureml.core import Workspace
 import os, json, sys
 import azureml.core
@@ -50,9 +53,11 @@ resource_group = config["resource_group"]
 subscription_id = config["subscription_id"]
 location = config["location"]
 '''
-workspace_name = "RecoWS"
-resource_group = "recommender"
-subscription_id = "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324"
+#workspace_name = "RecoWS"
+#resource_group = "recommender"
+#subscription_id = "15ae9cb6-95c1-483d-a0e3-b1a1a3b06324"
+print(" WS name ",workspace_name)
+print("subscription_id ",subscription_id)
 
 cli_auth = AzureCliAuthentication()
 
@@ -194,8 +199,13 @@ from azureml.core.script_run_config import ScriptRunConfig
 print("before folder = .")
 project_folder = "."
 print('before ScriptRunconfig')
+'''
 script_run_config = ScriptRunConfig(source_directory=project_folder,
                                     script='./tests/ci/unitrunpytest.py',
+                                    run_config=run_config)
+'''
+script_run_config = ScriptRunConfig(source_directory=project_folder,
+                                    script=pytest_str,
                                     run_config=run_config)
 
 print('before submit')
