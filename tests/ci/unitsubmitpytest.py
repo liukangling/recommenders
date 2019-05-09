@@ -24,12 +24,14 @@ ARISING IN ANY WAY OUT OF THE USE OF THE SOFTWARE CODE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 """
 import sys
+'''
 print("This is the name of the script: ", sys.argv[0])
 print("Number of arguments: ", len(sys.argv))
 print("The arguments are: " , str(sys.argv))
 
 pytest_str = sys.argv[1]
 print("pytest_str ",pytest_str)
+'''
 
 from azureml.core import Workspace
 import os, json, sys
@@ -94,6 +96,7 @@ print(ws.name, ws.resource_group, ws.location, ws.subscription_id, sep="\n")
 #
 from azureml.core import Experiment
 experiment_name = 'train-on-amlcompute'
+experiment_name = 'Master_CPU'
 experiment = Experiment(workspace = ws, name = experiment_name)
 
 #
@@ -205,7 +208,7 @@ script_run_config = ScriptRunConfig(source_directory=project_folder,
                                     run_config=run_config)
 '''
 script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                    script=pytest_str,
+                                    script='./tests/ci/runpytest-template.py',
                                     run_config=run_config)
 
 print('before submit')
