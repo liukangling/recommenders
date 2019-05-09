@@ -7,9 +7,10 @@
 variables:
 - group: AzureKeyVaultSecrets
 
-#trigger:
+trigger:
 #- azure-pipelines-bz
-
+  - master
+  
 pool:
  vmImage: 'ubuntu-16.04'
 
