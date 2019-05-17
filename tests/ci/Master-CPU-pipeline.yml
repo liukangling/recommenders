@@ -1,3 +1,4 @@
+# unit_tests_staging.yml
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
@@ -7,9 +8,12 @@
 variables:
 - group: AzureKeyVaultSecrets
 
-trigger: none
+#trigger:
 #- azure-pipelines-bz
 #  - master
+
+pr:
+- staging 
   
 pool:
  vmImage: 'ubuntu-16.04'
@@ -25,27 +29,29 @@ steps:
 
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
+   
   displayName: 'Login to Azure'
 
 - script: |
    sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
+   echo my subscription is $(SubscriptionID)
+   cat ./tests/ci/config.json
   displayName: 'replace subscription value'
 
 - script: 
-   sed -i 's#"tests/unit_or_smoke_int"#"tests/unit"#g' ./tests/ci/runpytest-template.py
+   sed -i 's#"tests/unit_or_smoke_int"#"tests/unit"#g' ./tests/ci/runpytest.py
   displayName: 'replace unit or smoke or int'
 
 - script:
-    sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest-template.py
+    sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest.py
   displayName: 'notebooks and spark and gpu'
-
 
 - bash: |
     echo "##vso[task.prependpath]/data/anaconda/bin"
   displayName: Add Conda to PATH
 
 - script: 'pip install azureml-sdk'
-  displayName: 'Prepare Conda Environment (using yml)'
+  displayName: 'install azureml-sdk'
   continueOnError: true
   
 - script: 
@@ -65,16 +71,12 @@ steps:
      python --version
      pip install azure-cli==2.0.46
      pip install --upgrade azureml-sdk[cli]
-     pip install -r tests/ci/requirements.txt
+#     pip install -r tests/ci/requirements.txt
   displayName: 'install cli'
 
-- task: AzureCLI@1
-  displayName: 'Create or get workspace'
-  inputs:
-    azureSubscription: 'AzureML Nursery (15ae9cb6-95c1-483d-a0e3-b1a1a3b06324)'
-    scriptLocation: inlineScript
-    inlineScript: 'python tests/ci/unitsubmitpytest.py'
-#    arguments: './tests/ci/unitrunpytest.py'
+- script: 
+      python tests/ci/submitpytest.py
+  displayName: 'standalone pytest'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/test-*.xml'
@@ -82,4 +84,3 @@ steps:
     testResultsFiles: '**/test-*.xml'
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
-
