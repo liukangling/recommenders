@@ -44,7 +44,7 @@ steps:
 
 - script:
     sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest.py
-  displayName: 'notebooks and spark and gpu'
+  displayName: 'notebooks and spark and gpu new'
 
 - bash: |
     echo "##vso[task.prependpath]/data/anaconda/bin"
