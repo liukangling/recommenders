@@ -8,18 +8,6 @@ pr:
 pool:
  vmImage: 'ubuntu-16.04'
 
-# auto-prepare the Docker image when used for execution (if it is not already
-# prepared)
-run_config.auto_prepare_environment = True
-
-print("reco_base.yaml path")
-print(os.path.dirname('./reco_base.yaml'))
-print('reco_base.yaml exists ', os.path.exists('./reco_base.yaml'))
-
-# specify CondaDependencies obj
-run_config.environment.python.conda_dependencies = CondaDependencies(
-    conda_dependencies_file_path='./reco_base.yaml')
-
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
    
