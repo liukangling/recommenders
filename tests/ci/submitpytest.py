@@ -27,7 +27,7 @@ with open("tests/ci/config.json") as f:
         subscription_id = config["subscription_id"]
         location = config["location"]
 
-        print(" WS name ", workspace_name)
+        print(" WS name ", ws)
         print("subscription_id ", subscription_id)
 
         cli_auth = AzureCliAuthentication()
