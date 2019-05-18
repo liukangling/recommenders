@@ -32,11 +32,33 @@ with open("tests/ci/config.json") as f:
         print("location",location)
 
         cli_auth = AzureCliAuthentication()
-    
+        print("cliauth")
+
+try:
+    print("Trying to get ws")
+    ws = Workspace.get(
+        name=workspace_name,
+        subscription_id=subscription_id,
+        resource_group=resource_group,
+        auth=cli_auth
+    )
+
+except Exception:
+    # this call might take a minute or two.
+    print("Creating new workspace")
+    ws = Workspace.create(
+        name=ws,
+        subscription_id=subscription_id,
+        resource_group=resource_group,
+        # create_resource_group=True,
+        location=location,
+        auth=cli_auth
+    )
+
 # Choose a name for your CPU cluster
 # cpu_cluster_name = "persistentcpu"
 cpu_cluster_name = "cpucluster"
-
+print("cpu_cluster_name",cpu_cluster_name)
 # Verify that cluster does not exist already
 # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
 
