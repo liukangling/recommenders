@@ -29,6 +29,7 @@ with open("tests/ci/config.json") as f:
 
         print(" WS name ", ws)
         print("subscription_id ", subscription_id)
+        print("location",location)
 
         cli_auth = AzureCliAuthentication()
     
@@ -40,6 +41,7 @@ try:
     cpu_cluster = ComputeTarget(workspace=ws, name=cpu_cluster_name)
     print('Found existing cluster, use it.')
 except ComputeTargetException:
+    print("create cluster")
     compute_config = AmlCompute.provisioning_configuration(vm_size='STANDARD_D2_V2',
                                                         max_nodes=4)
     cpu_cluster = ComputeTarget.create(ws, cpu_cluster_name, compute_config)
