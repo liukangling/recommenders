@@ -22,12 +22,12 @@ from azureml.core.compute_target import ComputeTargetException
 with open("tests/ci/config.json") as f:
         config = json.load(f)
 
-        ws = config["workspace_name"]
+        workspace_name= config["workspace_name"]
         resource_group = config["resource_group"]
         subscription_id = config["subscription_id"]
         location = config["location"]
 
-        print(" WS name ", ws)
+        print(" WS name ", workspace_name)
         print("subscription_id ", subscription_id)
         print("location",location)
 
