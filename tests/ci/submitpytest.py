@@ -103,7 +103,7 @@ run_amlcompute.environment.python.conda_dependencies = CondaDependencies(
 from azureml.core import Experiment
 experiment_name = 'PersistentAML'
 
-exp = Experiment(workspace=ws, name=experiment_name)
+experiment = Experiment(workspace=ws, name=experiment_name)
 project_folder = "."
 script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script='./tests/ci/runpytest.py',
