@@ -56,8 +56,8 @@ except Exception:
     )
 
 # Choose a name for your CPU cluster
-# cpu_cluster_name = "persistentcpu"
-cpu_cluster_name = "cpucluster"
+cpu_cluster_name = "persistentcpu"
+#cpu_cluster_name = "cpucluster"
 print("cpu_cluster_name",cpu_cluster_name)
 # Verify that cluster does not exist already
 # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
@@ -118,5 +118,5 @@ run.wait_for_completion(show_output=True, wait_post_processing=True)
 # look for individual run
 print('files', run.get_file_names())
 run.download_files(prefix='reports')
-run.tag('persistentaml')
+run.tag('persistentaml tag')
 
