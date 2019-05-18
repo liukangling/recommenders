@@ -34,9 +34,12 @@ with open("tests/ci/config.json") as f:
         cli_auth = AzureCliAuthentication()
     
 # Choose a name for your CPU cluster
-cpu_cluster_name = "persistentcpu"
+# cpu_cluster_name = "persistentcpu"
+cpu_cluster_name = "cpucluster"
 
 # Verify that cluster does not exist already
+# https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
+
 try:
     cpu_cluster = ComputeTarget(workspace=ws, name=cpu_cluster_name)
     print('Found existing cluster, use it.')
@@ -46,6 +49,7 @@ except ComputeTargetException:
                                                         max_nodes=4)
     cpu_cluster = ComputeTarget.create(ws, cpu_cluster_name, compute_config)
 
+cpu_cluster.wait_for_completion(show_output=True)
 
 from azureml.core.runconfig import RunConfiguration
 from azureml.core.conda_dependencies import CondaDependencies
