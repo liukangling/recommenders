@@ -9,7 +9,7 @@ print('before run.get_context')
 run = Run.get_context()
 print('before subprocess.run')
 
-subprocess.run(["pytest", "tests/unit/test_timer.py",
+subprocess.run(["pytest", "tests/unit",
                 "-m", "not notebooks and not spark and not gpu",
                 "--junitxml=reports/test-unit.xml"])
 
