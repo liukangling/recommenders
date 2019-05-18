@@ -75,7 +75,7 @@ steps:
 
 - script: 
       python tests/ci/submitpytest.py
-  displayName: 'standalone pytest'
+  displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/test-*.xml'
