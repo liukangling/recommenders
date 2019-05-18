@@ -1,24 +1,30 @@
+# Master-CPU-pipeline.yml
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+#
+# use variable group name
+variables:
+- group: AzureKeyVaultSecrets
+
 #trigger:
 #- azure-pipelines-bz
 #  - master
 
-pr:
-- staging 
+#pr:
+#- staging 
   
 pool:
  vmImage: 'ubuntu-16.04'
 
-# auto-prepare the Docker image when used for execution (if it is not already
-# prepared)
-run_config.auto_prepare_environment = True
+steps:
 
-print("reco_base.yaml path")
-print(os.path.dirname('./reco_base.yaml'))
-print('reco_base.yaml exists ', os.path.exists('./reco_base.yaml'))
-
-# specify CondaDependencies obj
-run_config.environment.python.conda_dependencies = CondaDependencies(
-    conda_dependencies_file_path='./reco_base.yaml')
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.6'
+    architecture: 'x64'
+  displayName: 'Use Python 3.6'
 
 - script: | 
    az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
@@ -69,7 +75,7 @@ run_config.environment.python.conda_dependencies = CondaDependencies(
 
 - script: 
       python tests/ci/submitpytest.py
-  displayName: 'standalone pytest'
+  displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/test-*.xml'
