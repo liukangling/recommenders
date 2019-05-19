@@ -55,6 +55,7 @@ steps:
   
 - script: 
      python scripts/generate_conda_file.py
+     mv reco_base.yaml reco.yaml
   displayName: ' generate_conda_file.py'
 
 - script: |
