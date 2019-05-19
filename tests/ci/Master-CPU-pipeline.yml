@@ -55,10 +55,10 @@ steps:
   
 - script: 
      python scripts/generate_conda_file.py
-     mv reco_base.yaml reco.yaml
   displayName: ' generate_conda_file.py'
 
 - script: |
+     mv reco_base.yaml reco.yaml
      chmod +x scripts/*.py
      ls -al scripts
      chmod +x tests/ci/*.py
