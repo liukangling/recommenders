@@ -98,7 +98,7 @@ run_amlcompute.auto_prepare_environment = True
 # Specify CondaDependencies obj, add necessary packages
 
 run_amlcompute.environment.python.conda_dependencies = CondaDependencies(
-        conda_dependencies_file_path='./reco_base.yaml')
+        conda_dependencies_file_path='./reco.yaml')
 
 from azureml.core import Experiment
 experiment_name = 'PersistentAML'
