@@ -74,6 +74,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
+      conda install -c conda-forge time
       python tests/ci/submitpytest.py
   displayName: 'standalone pytest test persistent'
 
