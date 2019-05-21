@@ -123,40 +123,44 @@ def submit_exp():
     run.tag('persistentaml tag')
 
 if __name__ == "__main__":
-        parser = argparse.ArgumentParser(
-        description="Parser", type=str, help="Help mandatory string param"
+    parser = argparse.ArgumentParser(
+        description=textwrap.dedent(
+            """
+        This script generates a conda file for different environments.
+        Plain python is the default, but flags can be used to support PySpark and GPU functionality"""
+        ),
+        epilog=HELP_MSG,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
     )
-    parser.add_argument(
-        "--script", action="store_true", default
-    )
+    parser.add_argument("--name", help="specify name of conda environment")
     parser.add_argument(
         "--gpu", action="store_true", help="include packages for GPU support"
     )
     parser.add_argument(
-        "--spark", action="store_true", help="add --spark if you want to run spark tests"
+        "--pyspark", action="store_true", help="include packages for PySpark support"
     )
     parser.add_argument(
-        "--not_notebooks", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+        "--pyspark-version", help="provide specific version of PySpark to use"
     )
-    parser.add_argument(
-        "--not_spark", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--not_gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--notebooks", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--spark", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--not_notebooks_and_not_spark_and_not_gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
-    )
-    parser.add_argument(
-        "--tests/unit", action="store_true", help="folder/type_of_test such as tests/unit or tests/smoke or tests/integration"
-    )
+    args = parser.parse_args()
+
+    # check pyspark version
+
+    if args.pyspark_version is not None:
+        args.pyspark = True
+        pyspark_version_info = args.pyspark_version.split(".")
+        if len(pyspark_version_info) != 3 or any(
+            [not x.isdigit() for x in pyspark_version_info]
+        ):
+            raise TypeError(
+                "PySpark version input must be valid numeric format (e.g. --pyspark-version=2.3.1)"
+            )
+
+    else:
+        args.pyspark_version = "2.3.1"
+    # overwrite environment name with user input
+    if args.name is not None:
+        conda_env = args.name
+
+        
     submit_exp()
