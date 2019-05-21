@@ -4,6 +4,7 @@
 
 import os
 import json
+import argparse
 import azureml.core
 from azureml.core.authentication import AzureCliAuthentication
 from azureml.core import Workspace
@@ -122,4 +123,40 @@ def submit_exp():
     run.tag('persistentaml tag')
 
 if __name__ == "__main__":
+        parser = argparse.ArgumentParser(
+        description="Parser", type=str, help="Help mandatory string param"
+    )
+    parser.add_argument(
+        "--script", action="store_true", default
+    )
+    parser.add_argument(
+        "--gpu", action="store_true", help="include packages for GPU support"
+    )
+    parser.add_argument(
+        "--spark", action="store_true", help="add --spark if you want to run spark tests"
+    )
+    parser.add_argument(
+        "--not_notebooks", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--not_spark", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--not_gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--notebooks", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--spark", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--not_notebooks_and_not_spark_and_not_gpu", action="store_true", help="pytest markers not notebooks and not spark and not gpu "
+    )
+    parser.add_argument(
+        "--tests/unit", action="store_true", help="folder/type_of_test such as tests/unit or tests/smoke or tests/integration"
+    )
     submit_exp()
