@@ -7,6 +7,20 @@
 # use variable group name
 variables:
 - group: AzureKeyVaultSecrets
+- name : 'testdir'
+  value : 'tests/ci/runpytest.py'
+- name : 'test_env'
+  value : 'not notebooks and not spark and not gpu'
+- name : 'test_tag'
+  value : 'unit tests'
+- name : 'workspace_name'
+  value : 'RecoWS'
+- name : 'resource_group'
+  value : 'recommender'
+- name : 'cluster_name'
+  value : 'persistentcpu'
+- name: 'vmsize'
+  value: 'STANDARD_D2_V2'
 
 #trigger:
 #- azure-pipelines-bz
@@ -54,7 +68,7 @@ steps:
   continueOnError: true
   
 - script: 
-     python scripts/generate_conda_file.py --name reco
+     python scripts/generate_conda_file.py --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
@@ -74,7 +88,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-      python tests/ci/submitpytest.py
+      python tests/ci/submitpytest.py --ws_name workspace_name --rg recommender --testdir testdir
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
