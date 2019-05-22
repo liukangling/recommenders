@@ -104,13 +104,16 @@ def submit_exp(testdir):
             conda_dependencies_file_path='./reco.yaml')
 
     experiment_name = 'PersistentAML'
-'''
+
     experiment = Experiment(workspace=ws, name=experiment_name)
     project_folder = "."
+
+    '''
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script='./tests/ci/runpytest.py',
                                         run_config=run_amlcompute)
 '''
+
     print('testdir', testdir)
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script='testdir',
