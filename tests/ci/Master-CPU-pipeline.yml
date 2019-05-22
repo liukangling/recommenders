@@ -64,7 +64,7 @@ steps:
   continueOnError: true
   
 - script: 
-     python scripts/generate_conda_file.py --name reco --ws_name workspace_name --RG recommender --testdir testdir
+     python scripts/generate_conda_file.py --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
@@ -84,7 +84,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-      python tests/ci/submitpytest.py
+      python tests/ci/submitpytest.py --ws_name workspace_name --RG recommender --testdir testdir
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
