@@ -21,7 +21,7 @@ from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 
 
-def submit_exp():
+def submit_exp(testdir):
     with open("tests/ci/config.json") as f:
             config = json.load(f)
 
@@ -104,13 +104,18 @@ def submit_exp():
             conda_dependencies_file_path='./reco.yaml')
 
     experiment_name = 'PersistentAML'
-
+'''
     experiment = Experiment(workspace=ws, name=experiment_name)
     project_folder = "."
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script='./tests/ci/runpytest.py',
                                         run_config=run_amlcompute)
-                                            
+'''
+
+    script_run_config = ScriptRunConfig(source_directory=project_folder,
+                                        script='testdir',
+                                        run_config=run_amlcompute)
+
     print('before submit')
     run = experiment.submit(script_run_config)
     print('after submit')
@@ -124,7 +129,7 @@ def submit_exp():
 
 
 if __name__ == "__main__":
-    '''
+    
     parser = argparse.ArgumentParser(
         description=textwrap.dedent(
             """
@@ -134,6 +139,12 @@ if __name__ == "__main__":
         epilog=HELP_MSG,
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
+    parser.add_argument("--testdir",
+                        action="store",
+                        default="tests/unit/runpytest.py",
+                        help="specify name of dir with tests")
+
+    '''
     parser.add_argument("--name", help="specify name of conda environment")
     parser.add_argument(
         "--gpu", action="store_true", help="include packages for GPU support"
@@ -165,5 +176,6 @@ if __name__ == "__main__":
         conda_env = args.name
 
 '''
-        
-    submit_exp()
+
+    args = parser.parse_args()      
+    submit_exp(args.testdir)
