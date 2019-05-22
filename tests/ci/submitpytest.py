@@ -24,7 +24,7 @@ def create_persistent_compute():
     x=1
 
 
-def submit_exp(testdir, wsname):
+def submit_exp(testdir, wsname, vmsize):
     with open("tests/ci/config.json") as f:
             config = json.load(f)
 
@@ -75,7 +75,7 @@ def submit_exp(testdir, wsname):
     except ComputeTargetException:
         print("create cluster")
         compute_config = AmlCompute.provisioning_configuration(
-                       vm_size='STANDARD_D2_V2',
+                       vm_size=vmsize,
                        max_nodes=4)
         cpu_cluster = ComputeTarget.create(ws,
                                            cpu_cluster_name,
@@ -161,7 +161,7 @@ if __name__ == "__main__":
                         help="Azure Resource Group")
     parser.add_argument("--vmsize",
                         action="store",
-                        default="STANDARD_D2_V2",
+                        default="STANDARD_D3_V2",
                         help="Set the size of the VM either STANDARD_D2_V2 or ")
     parser.add_argument("--exp",
                         action="store",
@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
     args = parser.parse_args()   
     print("args.wsname",args.wsname)   
-    submit_exp(args.testdir, args.wsname)
+    submit_exp(args.testdir, args.wsname, args.vmsize)
     # get azure values
     '''
     set_up_account_info(
