@@ -33,7 +33,7 @@ def submit_exp(testdir, wsname):
             resource_group = config["resource_group"]
             subscription_id = config["subscription_id"]
             location = config["location"]
-
+            print(" testdir ", testdir)
             print(" WS name ", workspace_name)
             print("subscription_id ", subscription_id)
             print("location", location)
@@ -50,7 +50,7 @@ def submit_exp(testdir, wsname):
             auth=cli_auth
         )
 
-    except WorkspaceException:
+    except Exception:
         # this call might take a minute or two.
         print("Creating new workspace")
         ws = Workspace.create(
@@ -201,7 +201,8 @@ if __name__ == "__main__":
 
 '''
 
-    args = parser.parse_args()      
+    args = parser.parse_args()   
+    print("args.wsname",args.wsname)   
     submit_exp(args.testdir, args.wsname)
     # get azure values
     '''
