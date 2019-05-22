@@ -7,6 +7,16 @@
 # use variable group name
 variables:
 - group: AzureKeyVaultSecrets
+- name : 'testdir'
+  value : 'tests/unit'
+- name : 'test_env'
+  value : 'not notebooks and not spark and not gpu'
+- name : 'test_tag'
+  value : 'unit tests'
+- name : 'workspace_name'
+  value : 'RecoWS'
+- name : 'resourcegroup'
+  value : 'recommender'
 
 #trigger:
 #- azure-pipelines-bz
@@ -54,7 +64,7 @@ steps:
   continueOnError: true
   
 - script: 
-     python scripts/generate_conda_file.py --name reco
+     python scripts/generate_conda_file.py --name reco --ws_name workspace_name --RG recommender --testdir testdir
   displayName: ' generate_conda_file.py'
 
 - script: |
