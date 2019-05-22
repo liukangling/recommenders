@@ -111,7 +111,7 @@ def submit_exp(testdir):
                                         script='./tests/ci/runpytest.py',
                                         run_config=run_amlcompute)
 '''
-
+    print('testdir', testdir)
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script='testdir',
                                         run_config=run_amlcompute)
