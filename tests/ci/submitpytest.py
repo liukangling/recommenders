@@ -47,7 +47,7 @@ def submit_exp(testdir, wsname):
             auth=cli_auth
         )
 
-    except Exception:
+    except WorkspaceException:
         # this call might take a minute or two.
         print("Creating new workspace")
         ws = Workspace.create(
@@ -150,7 +150,7 @@ if __name__ == "__main__":
                         help="Azure Resource Group")
     parser.add_argument("--wsname",
                         action="store",
-                        default="RecoWS"
+                        default="RecoWS",
                         help="AzureML workspace name")
     parser.add_argument("--clustername",
                         action="store",
@@ -160,6 +160,10 @@ if __name__ == "__main__":
                         action="store",
                         default="STANDARD_D2_V2",
                         help="Set the size of the VM either STANDARD_D2_V2 or ")
+    parser.add_argument("--exp",
+                        action="store",
+                        default="PersistentAML",
+                        help="Azure experiment name")
 
     '''
     parser.add_argument("--name", help="specify name of conda environment")
