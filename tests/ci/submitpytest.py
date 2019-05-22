@@ -20,6 +20,9 @@ from azureml.core.script_run_config import ScriptRunConfig
 from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 
+def create_persistent_compute():
+    x=1
+
 
 def submit_exp(testdir, wsname):
     with open("tests/ci/config.json") as f:
@@ -199,4 +202,14 @@ if __name__ == "__main__":
 '''
 
     args = parser.parse_args()      
-    submit_exp(args.testdir, arg.wsname)
+    submit_exp(args.testdir, args.wsname)
+    # get azure values
+    '''
+    set_up_account_info(
+    '''
+
+    # set up azureml cpu cluster
+    # runconfig
+    # use cpu cluster
+    # setup docker
+    # run exp
