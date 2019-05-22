@@ -8,16 +8,16 @@
 variables:
 - group: AzureKeyVaultSecrets
 - name : 'testdir'
-  value : 'tests/unit'
+  value : 'tests/ci/runpytest.py'
 - name : 'test_env'
   value : 'not notebooks and not spark and not gpu'
 - name : 'test_tag'
   value : 'unit tests'
 - name : 'workspace_name'
   value : 'RecoWS'
-- name : 'resourcegroup'
+- name : 'resource_group'
   value : 'recommender'
-- name : 'clustername'
+- name : 'cluster_name'
   value : 'persistentcpu'
 - name: 'vmsize'
   value: 'STANDARD_D2_V2'
@@ -88,7 +88,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-      python tests/ci/submitpytest.py --ws_name workspace_name --RG recommender --testdir testdir
+      python tests/ci/submitpytest.py --ws_name workspace_name --rg recommender --testdir testdir
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
