@@ -20,18 +20,19 @@ from azureml.core.script_run_config import ScriptRunConfig
 from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 
+
 def submit_exp():
     with open("tests/ci/config.json") as f:
             config = json.load(f)
 
-            workspace_name= config["workspace_name"]
+            workspace_name = config["workspace_name"]
             resource_group = config["resource_group"]
             subscription_id = config["subscription_id"]
             location = config["location"]
 
             print(" WS name ", workspace_name)
             print("subscription_id ", subscription_id)
-            print("location",location)
+            print("location", location)
 
             cli_auth = AzureCliAuthentication()
             print("cliauth")
@@ -59,8 +60,8 @@ def submit_exp():
 
     # Choose a name for your CPU cluster
     cpu_cluster_name = "persistentcpu"
-    #cpu_cluster_name = "cpucluster"
-    print("cpu_cluster_name",cpu_cluster_name)
+    # cpu_cluster_name = "cpucluster"
+    print("cpu_cluster_name", cpu_cluster_name)
     # Verify that cluster does not exist already
     # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
 
@@ -69,20 +70,20 @@ def submit_exp():
         print('Found existing cluster, use it.')
     except ComputeTargetException:
         print("create cluster")
-        compute_config = AmlCompute.provisioning_configuration(vm_size='STANDARD_D2_V2',
-                                                            max_nodes=4)
-        cpu_cluster = ComputeTarget.create(ws, cpu_cluster_name, compute_config)
+        compute_config = AmlCompute.provisioning_configuration(
+                       vm_size='STANDARD_D2_V2',
+                       max_nodes=4)
+        cpu_cluster = ComputeTarget.create(ws,
+                                           cpu_cluster_name,
+                                           compute_config)
 
     cpu_cluster.wait_for_completion(show_output=True)
 
-    from azureml.core.runconfig import RunConfiguration
-    from azureml.core.conda_dependencies import CondaDependencies
-    from azureml.core.runconfig import DEFAULT_CPU_IMAGE
-
     # Create a new runconfig object
+    # run_amlcompute = RunConfiguration(max_run_duration_seconds=60*30)
     run_amlcompute = RunConfiguration()
 
-    # Use the cpu_cluster you created above. 
+    # Use the cpu_cluster you created above.
     run_amlcompute.target = cpu_cluster
 
     # Enable Docker
@@ -102,14 +103,13 @@ def submit_exp():
     run_amlcompute.environment.python.conda_dependencies = CondaDependencies(
             conda_dependencies_file_path='./reco.yaml')
 
-    from azureml.core import Experiment
     experiment_name = 'PersistentAML'
 
     experiment = Experiment(workspace=ws, name=experiment_name)
     project_folder = "."
     script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                            script='./tests/ci/runpytest.py',
-                                            run_config=run_amlcompute)
+                                        script='./tests/ci/runpytest.py',
+                                        run_config=run_amlcompute)
                                             
     print('before submit')
     run = experiment.submit(script_run_config)
@@ -122,7 +122,9 @@ def submit_exp():
     run.download_files(prefix='reports')
     run.tag('persistentaml tag')
 
+
 if __name__ == "__main__":
+    '''
     parser = argparse.ArgumentParser(
         description=textwrap.dedent(
             """
@@ -162,5 +164,6 @@ if __name__ == "__main__":
     if args.name is not None:
         conda_env = args.name
 
+'''
         
     submit_exp()
