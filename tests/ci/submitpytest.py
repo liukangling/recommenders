@@ -21,11 +21,12 @@ from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 
 
-def submit_exp(testdir):
+def submit_exp(testdir, wsname):
     with open("tests/ci/config.json") as f:
             config = json.load(f)
 
-            workspace_name = config["workspace_name"]
+            # workspace_name = config["workspace_name"]
+            workspace_name = wsname
             resource_group = config["resource_group"]
             subscription_id = config["subscription_id"]
             location = config["location"]
@@ -137,8 +138,28 @@ if __name__ == "__main__":
         description='Process some inputs')
     parser.add_argument("--testdir",
                         action="store",
-                        default="tests/unit/runpytest.py",
+                        default="./tests/ci/runpytest.py",
                         help="specify name of dir with tests")
+    parser.add_argument("--maxnodes",
+                        action="store",
+                        default=4,
+                        help="specify the maximum number of nodes for the run")
+    parser.add_argument("--rg",
+                        action="store",
+                        default="recommender",
+                        help="Azure Resource Group")
+    parser.add_argument("--wsname",
+                        action="store",
+                        default="RecoWS"
+                        help="AzureML workspace name")
+    parser.add_argument("--clustername",
+                        action="store",
+                        default="persistentcpu",
+                        help="Azure Resource Group")
+    parser.add_argument("--vmsize",
+                        action="store",
+                        default="STANDARD_D2_V2",
+                        help="Set the size of the VM either STANDARD_D2_V2 or ")
 
     '''
     parser.add_argument("--name", help="specify name of conda environment")
@@ -174,4 +195,4 @@ if __name__ == "__main__":
 '''
 
     args = parser.parse_args()      
-    submit_exp(args.testdir)
+    submit_exp(args.testdir, arg.wsname)
