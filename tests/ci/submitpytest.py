@@ -120,7 +120,7 @@ def submit_exp(testdir, wsname):
 
     print('testdir', testdir)
     script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                        script='testdir',
+                                        script=testdir,
                                         run_config=run_amlcompute)
 
     print('before submit')
