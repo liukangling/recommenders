@@ -17,6 +17,10 @@ variables:
   value : 'RecoWS'
 - name : 'resourcegroup'
   value : 'recommender'
+- name : 'clustername'
+  value : 'persistentcpu'
+- name: 'vmsize'
+  value: 'STANDARD_D2_V2'
 
 #trigger:
 #- azure-pipelines-bz
