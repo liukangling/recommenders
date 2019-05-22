@@ -134,14 +134,7 @@ def submit_exp(testdir):
 if __name__ == "__main__":
     
     parser = argparse.ArgumentParser(
-        description=textwrap.dedent(
-            """
-        This script generates a conda file for different environments.
-        Plain python is the default, but flags can be used to support PySpark and GPU functionality"""
-        ),
-        epilog=HELP_MSG,
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-    )
+        description='Process some inputs')
     parser.add_argument("--testdir",
                         action="store",
                         default="tests/unit/runpytest.py",
