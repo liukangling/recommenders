@@ -24,7 +24,7 @@ variables:
 - name  : 'clustername'
   value : 'cluster-d3-v2'
 - name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
+  value : 'STANDARD_NC6'
 - name  : 'dockerproc'
   value : 'DEFAULT_GPU_IMAGE'
 - name  : 'expname'
