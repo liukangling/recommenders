@@ -7,20 +7,28 @@
 # use variable group name
 variables:
 - group: AzureKeyVaultSecrets
-- name : 'testdir'
-  value : 'tests/ci/runpytest.py'
-- name : 'test_env'
+- name  : 'test'
+  value : 'tests/ci/run_pytest.py'
+- name  : 'testdir'
+  value : './tests/unit'
+- name  : 'testmarkers'
   value : 'not notebooks and not spark and not gpu'
-- name : 'test_tag'
-  value : 'unit tests'
-- name : 'workspace_name'
-  value : 'RecoWS'
-- name : 'resource_group'
+- name  : 'junitxml'
+  value : '--junitxml=reports/test-unit.xml'
+- name  : 'maxnodes'
+  value : '4'
+- name  : 'rg'
   value : 'recommender'
-- name : 'cluster_name'
-  value : 'persistentcpu'
-- name: 'vmsize'
-  value: 'STANDARD_D2_V2'
+- name  : 'wsname'
+  value : 'RecoWS'
+- name  : 'clustername'
+  value : 'cluster-d3-v2'
+- name  : 'vmsize'
+  value : 'STANDARD_D3_V2'
+- name  : 'dockerproc'
+  value : 'DEFAULT_CPU_IMAGE'
+- name  : 'expname'
+  value : 'persistentAML'
 
 #trigger:
 #- azure-pipelines-bz
@@ -45,19 +53,19 @@ steps:
    
   displayName: 'Login to Azure'
 
-- script: |
-   sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
-   echo my subscription is $(SubscriptionID)
-   cat ./tests/ci/config.json
-  displayName: 'replace subscription value'
+#- script: |
+#   sed -i 's#"subscription_id": "<>"#"subscription_id": "$(SubscriptionID)"#g' ./tests/ci/config.json
+#   echo my subscription is $(SubscriptionID)
+#   cat ./tests/ci/config.json
+#  displayName: 'replace subscription value'
 
-- script: 
-   sed -i 's#"tests/unit_or_smoke_int"#"tests/unit"#g' ./tests/ci/runpytest.py
+#- script: 
+##   sed -i 's#"tests/unit_or_smoke_int"#"tests/unit"#g' ./tests/ci/runpytest.py
   displayName: 'replace unit or smoke or int'
 
-- script:
-    sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest.py
-  displayName: 'notebooks and spark and gpu new'
+#- script:
+#    sed -i 's#"not notebooks and not spark and not gpu"#"not notebooks and not spark and not gpu"#g' ./tests/ci/runpytest.py
+#  displayName: 'notebooks and spark and gpu new'
 
 - bash: |
     echo "##vso[task.prependpath]/data/anaconda/bin"
@@ -88,7 +96,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-      python tests/ci/submitpytest.py --wsname RecoWS --rg recommender
+      python tests/ci/submitpytest.py --wsname $(workspace_name) --rg recommender --subid $(SubscriptionID)
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
