@@ -1,34 +1,38 @@
-# Master-CPU-pipeline.yml
+# gpu_unit_test.yml
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
+#
+#
+# NOTE: start with cpu to make sure everything still works
 #
 # use variable group name
 variables:
 - group: AzureKeyVaultSecrets
 - name  : 'test'
   value : 'tests/ci/run_pytest.py'
-- name  : 'testdir'
+- name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
   value : 'not notebooks and not spark and gpu'
 - name  : 'junitxml'
   value : '--junitxml=reports/test-unit.xml'
-- name  : 'maxnodes'
-  value : '4'
-- name  : 'rg'
-  value : 'recommender'
-- name  : 'wsname'
-  value : 'RecoWS'
-- name  : 'clustername'
-  value : 'cluster-d3-v2'
-- name  : 'vmsize'
-  value : 'STANDARD_NC6'
+#   
+#- name  : 'maxnodes'
+#  value : '4'
+#- name  : 'rg'
+#  value : 'recommender'
+#- name  : 'wsname'
+#  value : 'RecoWS'
+#- name  : 'clustername'
+#  value : 'cluster-d3-v2'
+#- name  : 'vmsize'
+#  value : 'STANDARD_NC6'
 - name  : 'dockerproc'
-  value : 'DEFAULT_GPU_IMAGE'
-- name  : 'expname'
-  value : 'persistentAML'
+  value : 'cpu'
+#- name  : 'expname'
+#  value : 'persistentAML'
 
 #trigger:
 #- azure-pipelines-bz
@@ -84,7 +88,8 @@ steps:
   displayName: 'install cli'
 
 - script: 
-    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
+#    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
+    python tests/ci/submitpytest.py --subid $(SubscriptionID)
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
