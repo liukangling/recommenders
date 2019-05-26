@@ -21,6 +21,10 @@ def create_arg_parser():
                         action="store",
                         default="./tests/unit",
                         help="folder where tests are located")
+    parser.add_argument("--num",
+                        action="store",
+                        default="99",
+                        help="test num")
     parser.add_argument("--markers",
                         action="store",
                         default="not notebooks and not spark and not gpu",
@@ -36,8 +40,8 @@ def create_arg_parser():
 
 def run_pytest(test_folder="./tests/unit",
                test_markers="not notebooks and not spark and not gpu",
-               junitxml="--junitxml=reports/test-unit.xml"):
-
+               junitxml="--junitxml=reports/test-unit.xml",
+               test_num="77"):
     '''
     This is the script that is submitted to AzureML to run pytest.
 
@@ -82,15 +86,19 @@ def run_pytest(test_folder="./tests/unit",
     name_of_upload = "reports"
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
+    run.upload_file("reports", "./reports/test-unit.xml")
     # next try
-    # run.upload_files('./reports', './outputs')
-    # run.upload_files('./reports', './outputs')
-    # run.upload_file("logs/azureml/test-unit.xml", "logs/azureml/test-unit.xml")
+    # run = experiment.start_logging()
+    # run.upload_folder(name='important_files', path='path/on/disk')
+    # run.download_file('important_files/existing_file.txt', 'local_file.txt')
+    # code here:
+    # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
 
 
 if __name__ == "__main__":
 
     args = create_arg_parser()
+    print("arg.num ", args.num)
     # run_pytest()
     '''
     run_pytest(test_folder=args.testfolder,
@@ -99,4 +107,5 @@ if __name__ == "__main__":
     '''
     run_pytest(test_folder=args.testfolder,
                test_markers=args.markers,
-               junitxml="--junitxml="+args.markers)
+               junitxml="--junitxml="+args.markers,
+               test_num=args.num)

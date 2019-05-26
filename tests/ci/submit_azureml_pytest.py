@@ -200,13 +200,19 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     script_params = ["--test_folder",
                      test_folder]
     '''
-    script_params = []
 
+    '''
+    script_params = []
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script=test,
                                         run_config=run_config,
                                         arguments=["--test_folder",test_folder]
-                                       )
+    '''
+    script_run_config = ScriptRunConfig(source_directory=project_folder,
+                                        script=test,
+                                        run_config=run_config,
+                                        arguments=["--num", "5"]
+                                        )
     run = experiment.submit(script_run_config)
     # waits only for configuration to complete
     run.wait_for_completion(show_output=True, wait_post_processing=True)
@@ -318,10 +324,11 @@ if __name__ == "__main__":
                                 cli_auth=cli_auth,
                                 location=args.location)
 
-    cpu_cluster = setup_persistent_compute_target(workspace=workspace,
-                                    cluster_name=args.clustername,
-                                    vm_size=args.vmsize,
-                                    max_nodes=args.maxnodes)
+    cpu_cluster = setup_persistent_compute_target(
+                      workspace=workspace,
+                      cluster_name=args.clustername,
+                      vm_size=args.vmsize,
+                      max_nodes=args.maxnodes)
 
     run_config = create_run_config(cpu_cluster=cpu_cluster,
                                    docker_proc_type=docker_proc_type,
