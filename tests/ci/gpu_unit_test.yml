@@ -90,7 +90,7 @@ steps:
 
 - script: 
 #    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers testmarkers --clustername $(clustername) --expname $(expname)
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname)
   displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
