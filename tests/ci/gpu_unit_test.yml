@@ -28,6 +28,7 @@ variables:
 #- name  : 'clustername'
 #  value : 'cluster-d3-v2'
 #- name  : 'vmsize'
+#           VM with GPU
 #  value : 'STANDARD_NC6'
 - name  : 'dockerproc'
   value : 'cpu'
