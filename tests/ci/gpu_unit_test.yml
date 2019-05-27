@@ -15,9 +15,9 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : 'not notebooks and not spark and gpu'
-- name  : 'junitxml'
-  value : '--junitxml=reports/test-unit.xml'
+  value : 'not notebooks and not spark and not gpu'
+#- name  : 'junitxml'
+#  value : '--junitxml=reports/test-unit.xml'
 #   
 #- name  : 'maxnodes'
 #  value : '4'
@@ -25,15 +25,15 @@ variables:
 #  value : 'recommender'
 #- name  : 'wsname'
 #  value : 'RecoWS'
-#- name  : 'clustername'
-#  value : 'cluster-d3-v2'
+- name  : 'clustername'
+  value : 'Reco-cpu-test'
 #- name  : 'vmsize'
 #           VM with GPU
 #  value : 'STANDARD_NC6'
 - name  : 'dockerproc'
   value : 'cpu'
 #- name  : 'expname'
-#  value : 'persistentAML'
+#  value : 'cpu_unit_tests'
 
 #trigger:
 #- azure-pipelines-bz
@@ -83,14 +83,14 @@ steps:
 
 - script: |
      python --version
-     pip install azure-cli==2.0.46
+#     pip install azure-cli==2.0.46
      pip install --upgrade azureml-sdk[cli]
 #     pip install -r tests/ci/requirements.txt
   displayName: 'install cli'
 
 - script: 
 #    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
-    python tests/ci/submitpytest.py --subid $(SubscriptionID)
+    python tests/ci/submitpytest.py --subid $(SubscriptionID) --testmarkers testmarkers --clustername --expname $(expname)
   displayName: 'standalone pytest test persistent'
 
 - task: PublishTestResults@2
