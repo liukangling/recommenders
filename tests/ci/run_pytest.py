@@ -17,7 +17,7 @@ from azureml.core import Run
 def create_arg_parser():
 
     parser = argparse.ArgumentParser(description='Process inputs')
-    parser.add_argument("--testfolder",
+    parser.add_argument("--testfolder", "-f",
                         action="store",
                         default="./tests/unit",
                         help="folder where tests are located")
@@ -25,11 +25,11 @@ def create_arg_parser():
                         action="store",
                         default="99",
                         help="test num")
-    parser.add_argument("--markers",
+    parser.add_argument("--testmarkers", "-m",
                         action="store",
                         default="not notebooks and not spark and not gpu",
                         help="Specify test markers for test selection")
-    parser.add_argument("--junitxml",
+    parser.add_argument("--junitxml", "-j",
                         action="store",
                         default="--junitxml=reports/test-unit.xml",
                         help="Test results")
@@ -52,41 +52,36 @@ def run_pytest(test_folder="./tests/unit",
          junitxml     (str): file of output summary of tests run
                              note "--junitxml" is required as part of
                              the string
-                             Example: "--junitxml=reports/test-unit.xml"
+                                Example: "--junitxml=reports/test-unit.xml"
     Return: none
 
-    print('run_py: before run.get_context')
-    # Run.get_context() is needed to save context as pytest causes corruption
-    # of env vars
-    run = Run.get_context()
-    print('run_py: before subprocess.run')
     '''
     # Run.get_context() is needed to save context as pytest causes corruption
     # of env vars
     run = Run.get_context()
     '''
+    This is an example of a working subprocess.run for a unit test run.
     subprocess.run(["pytest", "tests/unit",
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    # run_time = time.time - start_time
 
-    '''
-    # run.log(name='Test Run', value='Unit Test Staging')
-    '''
-    print('run_py: test_folder:%s, test_markers:%s, junitxml:%s' %
-          (test_folder, test_markers, junitxml))
-    print('list:', ["pytest", test_folder, "-m", test_markers, junitxml])
+    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml])
     subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml])
-    print("os.listdir files", os.listdir("."))
-    print("os.listdir reports", os.listdir("reports"))
-    print("os.listdir reports", os.listdir("outputs"))
 
     # set up reports
     name_of_upload = "reports"
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
-    run.upload_file("reports", "./reports/test-unit.xml")
+    # run.upload_file("reports", "./reports/test-unit.xml")
+    print("before get_details")
+    run.get_details()
+    # run.log(name='Test Run', value='Unit Test Staging')
+
+    print("os.listdir files", os.listdir("."))
+    print("os.listdir reports", os.listdir("./reports"))
+    print("os.listdir outputs", os.listdir("./outputs"))
+
     # next try
     # run = experiment.start_logging()
     # run.upload_folder(name='important_files', path='path/on/disk')
@@ -98,14 +93,15 @@ def run_pytest(test_folder="./tests/unit",
 if __name__ == "__main__":
 
     args = create_arg_parser()
-    print("arg.num ", args.num)
     # run_pytest()
     '''
     run_pytest(test_folder=args.testfolder,
                test_markers=args.markers,
                junitxml=args.junitxml)
     '''
+    junit_str = "--junitxml="+args.junitxml
+    print('junit_str', junit_str)
     run_pytest(test_folder=args.testfolder,
-               test_markers=args.markers,
-               junitxml="--junitxml="+args.markers,
+               test_markers=args.testmarkers,
+               junitxml=junit_str,
                test_num=args.num)

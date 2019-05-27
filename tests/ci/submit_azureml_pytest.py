@@ -145,6 +145,8 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
 
 def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     """
+    AzureML requires the run environment to be setup prior to submitting the run.
+    This 
     """
 
     # runconfig with max_run_duration_seconds did not work, check why:
@@ -211,7 +213,12 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script=test,
                                         run_config=run_config,
-                                        arguments=["--num", "5"]
+                                        arguments=["--testfolder",
+                                                   test_folder,
+                                                   "--testmarkers",
+                                                   test_markers,
+                                                   "--junitxml",
+                                                   "reports/test-unit.xml"]
                                         )
     run = experiment.submit(script_run_config)
     # waits only for configuration to complete
@@ -244,7 +251,7 @@ def create_arg_parser():
                         help="pytest markers indicate tests to run")
     parser.add_argument("--junitxml",
                         action="store",
-                        default="--junitxml=reports/test-unit.xml",
+                        default="reports/test-unit.xml",
                         help="location for returned test results")
     parser.add_argument("--maxnodes",
                         action="store",
@@ -299,6 +306,9 @@ def create_arg_parser():
                         action="store",
                         default="--pr MyPR",
                         help="If a pr triggered the test, list it here")
+    parser.add_argument("--cpu",
+                        action="store_true",
+                        help="If run uses a CPU")
 
     args = parser.parse_args()
 
@@ -309,12 +319,12 @@ if __name__ == "__main__":
 
     args = create_arg_parser()
 
-    if args.dockerproc == "gpu":
-        from azureml.core.runconfig import DEFAULT_GPU_IMAGE
-        docker_proc_type = DEFAULT_GPU_IMAGE
-    else:
+    if args.cpu:
         from azureml.core.runconfig import DEFAULT_CPU_IMAGE
         docker_proc_type = DEFAULT_CPU_IMAGE
+    else:
+        from azureml.core.runconfig import DEFAULT_GPU_IMAGE
+        docker_proc_type = DEFAULT_GPU_IMAGE
 
     cli_auth = AzureCliAuthentication()
 
@@ -335,9 +345,9 @@ if __name__ == "__main__":
                                    conda_env_file=args.condafile)
 
     print("exp: watch for experiment in azure named ", args.expname)
-
+    # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
-    junitxml ="--j "+args.junitxml
+    junitxml = "--j"+args.junitxml
     run = submit_experiment_to_azureml(test=args.test,
                                        test_folder=args.testfolder,
                                        test_markers=args.testmarkers,
@@ -349,13 +359,15 @@ if __name__ == "__main__":
     run.tag('RepoName', args.reponame)
     run.tag('Branch', args.branch)
     run.tag('PR', args.pr)
-    run.get_details()
 
     # download files from storage
-    run.download_files(prefix='reports')
-    # run.download_files(prefix='reports', output_paths='.')
+    # run.download_files(prefix='reports')
+    run.download_files(prefix='reports', output_paths='./reports')
     # run.download_files(prefix='reports', output_paths='logs')
     # run.download_files(prefix='reports', output_paths='outputs')
-
+    name_of_upload = "reports"
+    path_on_disk = "./reports"
+    run.upload_folder(name_of_upload, path_on_disk)
+    
     run.get_file_names()
     run.complete()
