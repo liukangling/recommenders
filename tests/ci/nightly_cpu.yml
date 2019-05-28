@@ -1,6 +1,54 @@
-trigger:
+# cpu_unit_tests.yml
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+#
+#
+# NOTE: start with cpu to make sure everything still works
+#
+# use variable group name
+variables:
+- group: AzureKeyVaultSecrets
+- name  : 'test'
+  value : 'tests/ci/run_pytest.py'
+- name  : 'testfolder'
+  value : './tests/unit'
+- name  : 'testmarkers'
+  value : '"not notebooks and not spark and not gpu"'
+- name  : 'junitxml'
+  value : 'reports/test-unit.xml'
+#   
+- name  : 'maxnodes'
+  value : 4
+#- name  : 'rg'
+#  value : 'recommender'
+#- name  : 'wsname'
+#  value : 'RecoWS'
+- name  : 'reponame'
+  value : 'Recommenders'
+- name  : 'branch'
+  value : 'azure-pipelines-bz'
+- name  : 'clustername'
+  value : 'Reco-cpu-test'
+# GPU
+#- name  : 'vmsize'
+#  value : 'STANDARD_NC6'
+# CPU
+- name  : 'vmsize'
+  value : 'STANDARD_D3_V2'
+- name  : 'dockerproc'
+  value : '--cpu'
+- name  : 'expname'
+  value : 'cpu_unit_tests'
+
+#trigger:
 #- azure-pipelines-bz
-  - master
+# 
+
+#pr:
+#- staging 
+#- master
   
 pool:
  vmImage: 'ubuntu-16.04'
@@ -11,18 +59,24 @@ steps:
   inputs:
     versionSpec: '3.6'
     architecture: 'x64'
-  displayName: Use Python 3.6
+  displayName: 'Use Python 3.6'
+
+- script: | 
+   az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
+   
+  displayName: 'Login to Azure'
 
 - bash: |
     echo "##vso[task.prependpath]/data/anaconda/bin"
   displayName: Add Conda to PATH
 
-- script: 'pip install azureml-sdk'
-  displayName: 'Prepare Conda Environment (using yml)'
+- script: 
+     pip install azureml-sdk
   continueOnError: true
+  displayName: 'install azureml-sdk'
   
 - script: 
-     python scripts/generate_conda_file.py --gpu
+     python scripts/generate_conda_file.py --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
@@ -32,36 +86,16 @@ steps:
      ls -al tests/ci
      pwd
      ls -al
-     ls -al tests/ci/smoke
-     chmod +x tests/ci/smoke/*.py
   displayName: 'ls'
 
 - script: |
-     python --version
-     pip install azure-cli==2.0.46
+     pip install azure-cli
      pip install --upgrade azureml-sdk[cli]
-     pip install -r tests/ci/requirements.txt
   displayName: 'install cli'
 
-#- script: |
-#     source activate reco_gp && \
-#     pytest tests/unit -m "not notebooks and not spark and not gpu" --junitxml=reports/test-unit.xml
-#  displayName: ' Python Script'
-  
-#- bash: |
-#    conda env list
-#    source activate reco_gpu
-#    pytest --version
-#    python -c "import azureml.core; print("SDK version:", azureml.core.VERSION)"
-#    pytest tests/unit/test_gpu_utils.py::test_get_number_gpus
-#  displayName: 'unit tests'
-
-- task: AzureCLI@1
-  displayName: 'Create or get workspace'
-  inputs:
-    azureSubscription: 'AzureML Nursery (15ae9cb6-95c1-483d-a0e3-b1a1a3b06324)'
-    scriptLocation: inlineScript
-    inlineScript: 'python tests/ci/smoke/submitpytest.py'
+- script: 
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+  displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/test-*.xml'
