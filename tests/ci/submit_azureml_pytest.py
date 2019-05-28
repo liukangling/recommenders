@@ -219,6 +219,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
           run : AzureML run or trial
     """
     logger.debug('submit: testfolder', test_folder)
+    print("junitxml:",junitxml)
     project_folder = "."
 
     script_run_config = ScriptRunConfig(source_directory=project_folder,
