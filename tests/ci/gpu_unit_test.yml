@@ -76,7 +76,7 @@ steps:
   displayName: 'install azureml-sdk'
   
 - script: 
-     python scripts/generate_conda_file.py --name reco 
+     python scripts/generate_conda_file.py --gpu --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
