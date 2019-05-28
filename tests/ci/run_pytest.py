@@ -75,8 +75,7 @@ def run_pytest(test_folder="./tests/unit",
     name_of_upload = "reports"
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
-    # download files from AzureML
-    run.download_files(prefix='reports', output_paths='./reports')
+    
     print("os.listdir files", os.listdir("."))
     print("os.listdir reports", os.listdir("./reports"))
     print("os.listdir outputs", os.listdir("./outputs"))
