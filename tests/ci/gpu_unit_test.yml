@@ -16,22 +16,25 @@ variables:
   value : './tests/unit'
 - name  : 'testmarkers'
   value : '"not notebooks and not spark and not gpu"'
-#- name  : 'junitxml'
-#  value : '--junitxml=reports/test-unit.xml'
+- name  : 'junitxml'
+  value : 'reports/test-unit.xml'
 #   
-#- name  : 'maxnodes'
-#  value : '4'
+- name  : 'maxnodes'
+  value : 4
 #- name  : 'rg'
 #  value : 'recommender'
 #- name  : 'wsname'
 #  value : 'RecoWS'
 - name  : 'clustername'
   value : 'Reco-cpu-test'
+# GPU
 #- name  : 'vmsize'
-#           VM with GPU
 #  value : 'STANDARD_NC6'
+# CPU
+- name  : 'vmsize'
+  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : 'cpu'
+  value : '--cpu'
 - name  : 'expname'
   value : 'cpu_unit_tests'
 
@@ -90,7 +93,7 @@ steps:
 
 - script: 
 #    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname)
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --maxnodes $(maxnodes) --vmsize $(vmsize)
   displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
