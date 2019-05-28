@@ -47,9 +47,6 @@ from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
 from azureml.core.workspace import WorkspaceException
 
-logger = logging.getLogger(__name__)
-logging.basicConfig(level=logging.ERROR)
-
 
 def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
                     location):
@@ -74,10 +71,10 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
     Returns:
         ws: workspace reference
     """
-    print('setup: workspace_name is ', workspace_name)
-    print('setup: resource_group is ', resource_group)
-    print('setup: subid is ', subscription_id)
-    print('setup: location is ', location)
+    logger.debug('setup: workspace_name is ', workspace_name)
+    logger.debug('setup: resource_group is ', resource_group)
+    logger.debug('setup: subid is ', subscription_id)
+    logger.debug('setup: location is ', location)
 
     try:
             # use existing workspace if there is one
@@ -89,7 +86,7 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
             )
     except WorkspaceException:
             # this call might take a minute or two.
-            print("Creating new workspace")
+            logger.debug("Creating new workspace")
             ws = Workspace.create(
                 name=workspace_name,
                 subscription_id=subscription_id,
@@ -125,14 +122,14 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
     # setting vmsize and num nodes creates a persistent AzureML
     # compute resource
 
-    print("setup: cluster_name", cluster_name)
+    logger.debug("setup: cluster_name", cluster_name)
     # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
 
     try:
         cpu_cluster = ComputeTarget(workspace=workspace, name=cluster_name)
-        print('setup: Found existing cluster, use it.')
+        logger.debug('setup: Found existing cluster, use it.')
     except ComputeTargetException:
-        print("setup: create cluster")
+        logger.debug("setup: create cluster")
         compute_config = AmlCompute.provisioning_configuration(
                        vm_size=vm_size,
                        max_nodes=max_nodes)
@@ -193,7 +190,7 @@ def create_experiment(workspace, experiment_name):
         exp - AzureML experiment
     """
 
-    print("create: experiment_name ", experiment_name)
+    logger.debug("create: experiment_name ", experiment_name)
     exp = Experiment(workspace=workspace, name=experiment_name)
     return(exp)
 
@@ -221,7 +218,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     Return:
           run : AzureML run or trial
     """
-    print('submit: testfolder', test_folder)
+    logger.debug('submit: testfolder', test_folder)
     project_folder = "."
 
     script_run_config = ScriptRunConfig(source_directory=project_folder,
@@ -241,7 +238,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     # test logs can also be found on azure
     # go to azure portal to see log in azure ws and look for experiment name
     # and look for individual run
-    print('files', run.get_file_names())
+    logger.debug('files', run.get_file_names())
 
     return(run)
 
@@ -349,10 +346,10 @@ def create_arg_parser():
 
 
 if __name__ == "__main__":
-
+    logger = logging.getLogger(__name__)
     args = create_arg_parser()
 
-    if args.cpu:
+    if (args.dockerproc == "cpu"):
         from azureml.core.runconfig import DEFAULT_CPU_IMAGE
         docker_proc_type = DEFAULT_CPU_IMAGE
     else:
@@ -377,7 +374,7 @@ if __name__ == "__main__":
                                    docker_proc_type=docker_proc_type,
                                    conda_env_file=args.condafile)
 
-    print("exp: watch for experiment in azure named ", args.expname)
+    logger.debug("exp: watch for experiment in azure named ", args.expname)
     # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
     junitxml = "--j"+args.junitxml
