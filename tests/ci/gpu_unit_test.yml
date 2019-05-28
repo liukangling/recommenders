@@ -31,7 +31,7 @@ variables:
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
   value : 'Reco-gpu-test'
- GPU
+# GPU
 - name  : 'vmsize'
   value : 'STANDARD_NC6'
 # CPU
