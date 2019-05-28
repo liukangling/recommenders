@@ -89,11 +89,11 @@ steps:
   displayName: 'ls'
 
 - script: |
-     python --version
-     pip install azure-cli==2.0.46
-     pip install --upgrade azureml-sdk[cli]
+#     python --version
+#     pip install azure-cli==2.0.46
+     pip install --upgrade azureml-sdk
 #     pip install -r tests/ci/requirements.txt
-  displayName: 'install cli'
+#  displayName: 'install cli'
 
 - script: 
 #    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
