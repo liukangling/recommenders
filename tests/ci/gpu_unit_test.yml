@@ -15,7 +15,7 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"not notebooks and not spark and not gpu"'
+  value : '"not notebooks and not spark and gpu"'
 - name  : 'junitxml'
   value : 'reports/test-unit.xml'
 #   
@@ -30,17 +30,17 @@ variables:
 - name  : 'branch'
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
-  value : 'Reco-cpu-test'
-# GPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_NC6'
-# CPU
+  value : 'Reco-gpu-test'
+ GPU
 - name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
+  value : 'STANDARD_NC6'
+# CPU
+#- name  : 'vmsize'
+#  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : '--cpu'
+  value : '--gpu'
 - name  : 'expname'
-  value : 'cpu_unit_tests'
+  value : 'gpu_unit_tests'
 
 #trigger:
 #- azure-pipelines-bz
