@@ -1,4 +1,4 @@
-# cpu_unit_tests.yml
+# nightly_cpu.yml
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
@@ -15,9 +15,9 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"not notebooks and not spark and not gpu"'
+  value : '"smoke and not spark and not gpu"'
 - name  : 'junitxml'
-  value : 'reports/test-unit.xml'
+  value : 'reports/test-smoke.xml'
 #   
 - name  : 'maxnodes'
   value : 4
@@ -30,7 +30,7 @@ variables:
 - name  : 'branch'
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
-  value : 'Reco-cpu-test'
+  value : 'reco-nightly-cpu'
 # GPU
 #- name  : 'vmsize'
 #  value : 'STANDARD_NC6'
@@ -40,7 +40,7 @@ variables:
 - name  : 'dockerproc'
   value : '--cpu'
 - name  : 'expname'
-  value : 'cpu_unit_tests'
+  value : 'nightly_smoke_cpu'
 
 #trigger:
 #- azure-pipelines-bz
