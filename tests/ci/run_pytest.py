@@ -71,11 +71,12 @@ def run_pytest(test_folder="./tests/unit",
     print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml])
     subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml])
 
-    # upload files for AzureML
+    #  files for AzureML
     name_of_upload = "reports"
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
-    
+    # download files from AzureML
+    run.download_files(prefix='reports', output_paths='./reports')
     print("os.listdir files", os.listdir("."))
     print("os.listdir reports", os.listdir("./reports"))
     print("os.listdir outputs", os.listdir("./outputs"))
@@ -93,5 +94,4 @@ if __name__ == "__main__":
     print('junit_str', junit_str)
     run_pytest(test_folder=args.testfolder,
                test_markers=args.testmarkers,
-               junitxml=junit_str,
-               test_num=args.num)
+               junitxml=junit_str)
