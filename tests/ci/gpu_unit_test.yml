@@ -38,7 +38,7 @@ variables:
 #- name  : 'vmsize'
 #  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : '--gpu'
+  value : 'gpu'
 - name  : 'expname'
   value : 'gpu_unit_tests'
 
