@@ -15,7 +15,7 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"not notebooks and not spark and not gpu"'
+  value : '"not notebooks and not spark and gpu"'
 - name  : 'junitxml'
   value : 'reports/test-unit.xml'
 #   
@@ -30,17 +30,17 @@ variables:
 - name  : 'branch'
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
-  value : 'Reco-cpu-test'
+  value : 'Reco-gpu-test'
 # GPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_NC6'
-# CPU
 - name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
+  value : 'STANDARD_NC6'
+# CPU
+#- name  : 'vmsize'
+#  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : '--cpu'
+  value : 'gpu'
 - name  : 'expname'
-  value : 'cpu_unit_tests'
+  value : 'gpu_unit_tests'
 
 #trigger:
 #- azure-pipelines-bz
@@ -76,7 +76,7 @@ steps:
   displayName: 'install azureml-sdk'
   
 - script: 
-     python scripts/generate_conda_file.py --name reco 
+     python scripts/generate_conda_file.py --gpu --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
@@ -89,15 +89,16 @@ steps:
   displayName: 'ls'
 
 - script: |
-     python --version
-     pip install azure-cli==2.0.46
+     pip install azure-cli
      pip install --upgrade azureml-sdk[cli]
 #     pip install -r tests/ci/requirements.txt
+#     python --version
+#     pip install azure-cli==2.0.46
   displayName: 'install cli'
 
 - script: 
 #    python tests/ci/submitpytest.py --wsname $(workspace_name) --rg $(rg) --subid $(SubscriptionID) --testmarkers $(testmarkers)
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
