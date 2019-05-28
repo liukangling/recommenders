@@ -42,7 +42,6 @@ from azureml.core import Workspace
 from azureml.core import Experiment
 from azureml.core.runconfig import RunConfiguration
 from azureml.core.conda_dependencies import CondaDependencies
-# from azureml.core.runconfig import DEFAULT_CPU_IMAGE
 from azureml.core.script_run_config import ScriptRunConfig
 from azureml.core.compute import ComputeTarget, AmlCompute
 from azureml.core.compute_target import ComputeTargetException
@@ -54,7 +53,8 @@ logging.basicConfig(level=logging.ERROR)
 
 def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
                     location):
-    """ This sets up an Azure Workspace.
+    """
+    This sets up an Azure Workspace.
     An existing Azure Workspace is used or a new one is created if needed for
     the pytest run.
 
@@ -120,7 +120,7 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
         max_nodes    (int): Number of VMs, max_nodes=4 will
                             autoscale up to 4 VMs
     Returns:
-
+        cpu_cluster : cluster created by AzureML
     """
     # setting vmsize and num nodes creates a persistent AzureML
     # compute resource
@@ -145,8 +145,22 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
 
 def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     """
-    AzureML requires the run environment to be setup prior to submitting the run.
-    This 
+    AzureML requires the run environment to be setup prior to submission.
+    This configures a docker persistent compute.  Even though
+    it is called Persistent compute, AzureML handles startup/shutdown
+    of the compute environment.
+
+    Args:
+        cpu_cluster      (str) : Names the cluster for the test
+                                 In the case of unit tests, any of
+                                 the following:
+                                 - Reco_cpu_test
+                                 - Reco_gpu_test
+        docker_proc_type (str) : processor type, cpu or gpu
+        conda_env_file   (str) : filename which contains info to
+                                 set up conda env
+    Return:
+          run_amlcompute : AzureML run config
     """
 
     # runconfig with max_run_duration_seconds did not work, check why:
@@ -168,6 +182,15 @@ def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
 
 def create_experiment(workspace, experiment_name):
     """
+    AzureML requires an experiment as a container of trials.
+    This will either create a new experiment or use an
+    existing one.
+
+    Args:
+        workspace (str) : name of AzureML workspace
+        experiment_name (str) : AzureML experiment name
+    Return:
+        exp - AzureML experiment
     """
 
     print("create: experiment_name ", experiment_name)
@@ -195,21 +218,12 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
         run_config - environment configuration
         experiment - instance of an Experiment, a collection of
                      trials where each trial is a run.
+    Return:
+          run : AzureML run or trial
     """
     print('submit: testfolder', test_folder)
     project_folder = "."
-    '''
-    script_params = ["--test_folder",
-                     test_folder]
-    '''
 
-    '''
-    script_params = []
-    script_run_config = ScriptRunConfig(source_directory=project_folder,
-                                        script=test,
-                                        run_config=run_config,
-                                        arguments=["--test_folder",test_folder]
-    '''
     script_run_config = ScriptRunConfig(source_directory=project_folder,
                                         script=test,
                                         run_config=run_config,
@@ -234,49 +248,62 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
 
 def create_arg_parser():
     """
+    Many of the argument defaults are used as arg_parser makes it easy to
+    use defaults. The user has many options they can select.
     """
 
     parser = argparse.ArgumentParser(description='Process some inputs')
+    # script to run pytest
     parser.add_argument("--test",
                         action="store",
                         default="./tests/ci/run_pytest.py",
                         help="location of script to run pytest")
+    # test folder
     parser.add_argument("--testfolder",
                         action="store",
                         default="./tests/unit",
                         help="folder where tests are stored")
+    # pytest test markers
     parser.add_argument("--testmarkers",
                         action="store",
                         default="not notebooks and not spark and not gpu",
                         help="pytest markers indicate tests to run")
+    # test summary file
     parser.add_argument("--junitxml",
                         action="store",
                         default="reports/test-unit.xml",
-                        help="location for returned test results")
+                        help="file for returned test results")
+    # max num nodes in Azure cluster
     parser.add_argument("--maxnodes",
                         action="store",
                         default=4,
                         help="specify the maximum number of nodes for the run")
+    # Azure resource group
     parser.add_argument("--rg",
                         action="store",
                         default="recommender",
                         help="Azure Resource Group")
+    # AzureML workspace Name
     parser.add_argument("--wsname",
                         action="store",
                         default="RecoWS",
                         help="AzureML workspace name")
+    # AzureML clustername
     parser.add_argument("--clustername",
                         action="store",
                         default="amlcompute",
                         help="Set name of Azure cluster")
+    # Azure VM size
     parser.add_argument("--vmsize",
                         action="store",
                         default="STANDARD_D3_V2",
                         help="Set the size of the VM either STANDARD_D3_V2")
+    # cpu or gpu
     parser.add_argument("--dockerproc",
                         action="store",
                         default="cpu",
                         help="Base image used in docker container")
+    # Azure subscription id, when used in a pipeline, it is stored in keyvault
     parser.add_argument("--subid",
                         action="store",
                         default="123456",
@@ -287,25 +314,31 @@ def create_arg_parser():
                         action="store",
                         default="./reco.yaml",
                         help="file with environment variables")
+    # AzureML experiment name
     parser.add_argument("--expname",
                         action="store",
                         default="persistentAML",
                         help="experiment name on Azure")
+    # Azure datacenter location
     parser.add_argument("--location",
                         default="EastUS",
                         help="Azure location")
+    # github repo, stored in AzureML experiment for info purposes
     parser.add_argument("--reponame",
                         action="store",
                         default="--reponame MyGithubRepo",
                         help="GitHub repo being tested")
+    # github branch, stored in AzureML experiment for info purposes
     parser.add_argument("--branch",
                         action="store",
                         default="--branch MyGithubBranch",
                         help=" Identify the branch test test is run on")
+    # github pull request, stored in AzureML experiment for info purposes
     parser.add_argument("--pr",
                         action="store",
                         default="--pr MyPR",
                         help="If a pr triggered the test, list it here")
+    # cpu or gpu run
     parser.add_argument("--cpu",
                         action="store_true",
                         help="If run uses a CPU")
@@ -360,14 +393,6 @@ if __name__ == "__main__":
     run.tag('Branch', args.branch)
     run.tag('PR', args.pr)
 
-    # download files from storage
-    # run.download_files(prefix='reports')
+    # download files from AzureML
     run.download_files(prefix='reports', output_paths='./reports')
-    # run.download_files(prefix='reports', output_paths='logs')
-    # run.download_files(prefix='reports', output_paths='outputs')
-    name_of_upload = "reports"
-    path_on_disk = "./reports"
-    run.upload_folder(name_of_upload, path_on_disk)
-    
-    run.get_file_names()
     run.complete()
