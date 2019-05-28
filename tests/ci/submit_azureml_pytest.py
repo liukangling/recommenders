@@ -229,7 +229,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
                                                    "--testmarkers",
                                                    test_markers,
                                                    "--junitxml",
-                                                   "reports/test-unit.xml"]
+                                                   junit.xml]
                                         )
     run = experiment.submit(script_run_config)
     # waits only for configuration to complete

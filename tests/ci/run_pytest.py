@@ -33,7 +33,7 @@ def create_arg_parser():
     # test results file
     parser.add_argument("--junitxml", "-j",
                         action="store",
-                        default="--junitxml=reports/test-unit.xml",
+                        default="reports/test-unit.xml",
                         help="Test results")
 
     args = parser.parse_args()
