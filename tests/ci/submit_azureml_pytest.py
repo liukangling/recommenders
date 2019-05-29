@@ -348,6 +348,7 @@ def create_arg_parser():
 
 if __name__ == "__main__":
     logger = logging.getLogger(__name__)
+    logger.setLevel(level=DEBUG)
     args = create_arg_parser()
 
     if (args.dockerproc == "cpu"):
