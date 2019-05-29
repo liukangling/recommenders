@@ -211,7 +211,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
         junitxml     (str) - file of output summary of tests run
                              note "--junitxml" is required as part
                              of the string
-                             Example: "--junitxml=reports/test-unit.xml"
+                             Example: "--junitxml reports/test-unit.xml"
         run_config - environment configuration
         experiment - instance of an Experiment, a collection of
                      trials where each trial is a run.

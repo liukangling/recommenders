@@ -40,9 +40,9 @@ def create_arg_parser():
     return(args)
 
 
-def run_pytest(test_folder="./tests/unit",
-               test_markers="not notebooks and not spark and not gpu",
-               junitxml="--junitxml=reports/test-unit.xml"):
+def run_pytest(test_folder,
+               test_markers,
+               junitxml):
     '''
     This is the script that is submitted to AzureML to run pytest.
 
@@ -66,9 +66,9 @@ def run_pytest(test_folder="./tests/unit",
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-
-    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml])
-    subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml])
+    junit_str = "--junitxml="+args.junitxml
+    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junit_str])
+    subprocess.run(["pytest", test_folder, "-m", test_markers, junit_str])
 
     #  files for AzureML
     name_of_upload = "reports"
@@ -88,8 +88,8 @@ if __name__ == "__main__":
     args = create_arg_parser()
 
     # run_pytest()
-    junit_str = "--junitxml="+args.junitxml
+   
     # logger.debug(('junit_str', junit_str)
     run_pytest(test_folder=args.testfolder,
                test_markers=args.testmarkers,
-               junitxml=junit_str)
+               junitxml=args.junitxml)
