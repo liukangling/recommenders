@@ -42,7 +42,7 @@ variables:
 - name  : 'expname'
   value : 'nightly_integration_cpu'
 
-#trigger:
+trigger: none
 #- azure-pipelines-bz
 # 
 
