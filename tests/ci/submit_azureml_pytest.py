@@ -383,7 +383,7 @@ if __name__ == "__main__":
     run = submit_experiment_to_azureml(test=args.test,
                                        test_folder=args.testfolder,
                                        test_markers=args.testmarkers,
-                                       junitxml=junitxml,
+                                       junitxml=args.junitxml,
                                        run_config=run_config,
                                        experiment=experiment)
 
