@@ -379,7 +379,7 @@ if __name__ == "__main__":
     print("exp: watch for experiment in azure named ", args.expname)
     # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
-    junitxml = '--junitxml='+args.junitxml
+    junitxml = '--xmlname='+args.junitxml
     run = submit_experiment_to_azureml(test=args.test,
                                        test_folder=args.testfolder,
                                        test_markers=args.testmarkers,
