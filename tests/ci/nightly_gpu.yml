@@ -10,6 +10,24 @@
 # use variable group name
 variables:
  'test': 'tests/ci/run_pytest.py'
+- name  : 'maxnodes'
+  value : 4
+#- name  : 'rg'
+#  value : 'recommender'
+#- name  : 'wsname'
+#  value : 'RecoWS'
+- name  : 'reponame'
+  value : 'Recommenders'
+- name  : 'branch'
+  value : 'azure-pipelines-bz'
+# GPU
+#- name  : 'vmsize'
+#  value : 'STANDARD_NC6'
+# CPU
+- name  : 'vmsize'
+  value : 'STANDARD_D3_V2'
+- name  : 'dockerproc'
+  value : '--cpu'
 
 jobs:
 - job : A
@@ -18,19 +36,27 @@ jobs:
 
   variables:
   - group: AzureKeyVaultSecrets
+  - name  : 'testfolder'
+    value : './tests/smoke'
+  - name  : 'testmarkers'
+    value : '"smoke and not spark and not gpu"'
+  - name  : 'junitxml'
+    value : 'reports/test-smoke.xml'
+  - name  : 'clustername'
+    value : 'reco-nightly-cpu'
+  - name  : 'expname'
+    value : 'nightly_smoke_cpu'
 
   trigger: none
-#- azure-pipelines-bz
-# 
 
   pr: none
 #- staging 
 #- master
-  
 
   steps:
 
   - bash: echo This is a test $(test)
   - template: env-setup.yml # template reference
+    
 - job : b
 
