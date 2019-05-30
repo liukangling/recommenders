@@ -9,8 +9,9 @@
 #
 # use variable group name
 variables:
+ 'test': 'tests/ci/run_pytest.py'
 - group: AzureKeyVaultSecrets
-  'test': 'tests/ci/run_pytest.py'
+ 
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
