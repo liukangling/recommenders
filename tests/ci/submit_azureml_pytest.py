@@ -348,8 +348,9 @@ def create_arg_parser():
 
 
 if __name__ == "__main__":
-    logger = logging.getLogger(__name__)
-    # logging.basicConfig(level=logging.DEBUG)
+    logger = logging.getLogger("submit_azureml_pytest.py")
+    logger.setLevel(logging.DEBUG)
+    logging.basicConfig(level=logging.DEBUG)
     args = create_arg_parser()
 
     if (args.dockerproc == "cpu"):
@@ -378,6 +379,9 @@ if __name__ == "__main__":
                                    conda_env_file=args.condafile)
 
     print("exp: watch for experiment in azure named ", args.expname)
+    print("newline")
+    print("args.junitxml", args.junitxml)
+    print("blank")
     # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
     run = submit_experiment_to_azureml(test=args.test,
