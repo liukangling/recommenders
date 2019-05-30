@@ -9,28 +9,32 @@
 #
 # use variable group name
 variables:
- 'test': 'tests/ci/run_pytest.py'
-- name  : 'maxnodes'
-  value : 4
+ 'test'     : 'tests/ci/run_pytest.py'
+ 'maxnodes' : 4
 #- name  : 'rg'
 #  value : 'recommender'
 #- name  : 'wsname'
 #  value : 'RecoWS'
-- name  : 'reponame'
-  value : 'Recommenders'
-- name  : 'branch'
-  value : 'azure-pipelines-bz'
+#  'reponame' : 'Recommenders'
+#- name  : 'branch'
+#  value : 'azure-pipelines-bz'
 # GPU
 #- name  : 'vmsize'
 #  value : 'STANDARD_NC6'
 # CPU
-- name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
-- name  : 'dockerproc'
-  value : '--cpu'
+#- name  : 'vmsize'
+#  value : 'STANDARD_D3_V2'
+#- name  : 'dockerproc'
+#  value : '--cpu'
+
+trigger: none
+
+pr: none
+#- staging 
+#- master
 
 jobs:
-- job : A
+- job : Smoke
   pool:
     vmImage: 'ubuntu-16.04'
 
@@ -47,12 +51,6 @@ jobs:
   - name  : 'expname'
     value : 'nightly_smoke_cpu'
 
-  trigger: none
-
-  pr: none
-#- staging 
-#- master
-
   steps:
 
   - bash: echo This is a test $(test)
@@ -62,20 +60,20 @@ jobs:
      python scripts/generate_conda_file.py --cpu --name reco 
   displayName: ' generate_conda_file.py'
   
-  - script: 
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-  displayName: 'submit_azureml_pytest'
+#  - script: 
+#    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+#  displayName: 'submit_azureml_pytest'
 
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/test-*.xml'
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    failTaskOnFailedTests: true
-  condition: succeededOrFailed()
+#- task: PublishTestResults@2
+#  displayName: 'Publish Test Results **/test-*.xml'
+#  inputs:
+#    testResultsFiles: '**/test-*.xml'
+#    failTaskOnFailedTests: true
+#  condition: succeededOrFailed()
 
-# add conda activate here
-- job : b
-
+- job : Integration
+  pool:
+    vmImage: 'ubuntu-16.04'
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
@@ -90,11 +88,22 @@ jobs:
     value : 'nightly_integration_cpu'
      trigger: none
 
-  pr: none
-#- staging 
-#- master
-
   steps:
 
   - bash: echo This is a test $(test)
   - template: env-setup.yml # template reference
+
+  - script: 
+     python scripts/generate_conda_file.py --cpu --name reco 
+  displayName: ' generate_conda_file.py'
+  
+#  - script: 
+#    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+#  displayName: 'submit_azureml_pytest'
+
+#- task: PublishTestResults@2
+#  displayName: 'Publish Test Results **/test-*.xml'
+#  inputs:
+#    testResultsFiles: '**/test-*.xml'
+#    failTaskOnFailedTests: true
+#  condition: succeededOrFailed()
