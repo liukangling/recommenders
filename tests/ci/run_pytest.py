@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     # run_pytest()
    
-    print(('junit_xml', junit_xml)
+    print(('junit_xml', args.xmlname)
     run_pytest(test_folder=args.testfolder,
                test_markers=args.testmarkers,
-               junitxml=args.junitxml)
+               junitxml=args.xmlname)
