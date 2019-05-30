@@ -51,8 +51,6 @@ jobs:
   - name  : 'expname'
     value : 'nightly_smoke_cpu'
 
-
-
   steps:
 
   - bash: echo This is a test $(test)
@@ -73,9 +71,9 @@ jobs:
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
 
-# add conda activate here
 - job : Integration
-
+  pool:
+    vmImage: 'ubuntu-16.04'
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
