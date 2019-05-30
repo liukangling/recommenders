@@ -27,6 +27,12 @@ variables:
 #- name  : 'dockerproc'
 #  value : '--cpu'
 
+  trigger: none
+
+  pr: none
+#- staging 
+#- master
+
 jobs:
 - job : Smoke
   pool:
@@ -45,11 +51,7 @@ jobs:
   - name  : 'expname'
     value : 'nightly_smoke_cpu'
 
-  trigger: none
 
-  pr: none
-#- staging 
-#- master
 
   steps:
 
@@ -87,10 +89,6 @@ jobs:
   - name  : 'expname'
     value : 'nightly_integration_cpu'
      trigger: none
-
-  pr: none
-#- staging 
-#- master
 
   steps:
 
