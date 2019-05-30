@@ -55,7 +55,7 @@ jobs:
 
   - script: | 
      az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-  displayName: 'Login to Azure'
+    displayName: 'Login to Azure'
 
   - template: env-setup.yml # template reference
 
