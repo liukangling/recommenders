@@ -9,8 +9,8 @@
 #
 # use variable group name
 variables:
- 'test'     : 'tests/ci/run_pytest.py'
- 'maxnodes' : 4
+  test: 'tests/ci/run_pytest.py'
+  maxnodes : 4
 #- name  : 'rg'
 #  value : 'recommender'
 #- name  : 'wsname'
