@@ -31,6 +31,6 @@ jobs:
   steps:
 
   - bash: echo This is a test $(test)
-
+  - template: env-setup.yml # template reference
 - job : b
 
