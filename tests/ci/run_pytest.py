@@ -31,14 +31,13 @@ def create_arg_parser():
                         default="not notebooks and not spark and not gpu",
                         help="Specify test markers for test selection")
     # test results file
-    parser.add_argument("--junitxml", "-j",
+    parser.add_argument("--xmlname", "-j",
                         action="store",
                         default="reports/test-unit.xml",
                         help="Test results")
 
     args = parser.parse_args()
     return(args)
-
 
 def run_pytest(test_folder,
                test_markers,
@@ -75,9 +74,9 @@ def run_pytest(test_folder,
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
 
-    # logger.debug(("os.listdir files", os.listdir("."))
-    # logger.debug(("os.listdir reports", os.listdir("./reports"))
-    # logger.debug(("os.listdir outputs", os.listdir("./outputs"))
+    # print(("os.listdir files", os.listdir("."))
+    # print(("os.listdir reports", os.listdir("./reports"))
+    # print(("os.listdir outputs", os.listdir("./outputs"))
 
     # Leveraged code from this  notebook:
     # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
@@ -89,7 +88,7 @@ if __name__ == "__main__":
 
     # run_pytest()
    
-    # logger.debug(('junit_str', junit_str)
+    print(('junit_xml', junit_xml)
     run_pytest(test_folder=args.testfolder,
                test_markers=args.testmarkers,
                junitxml=args.junitxml)
