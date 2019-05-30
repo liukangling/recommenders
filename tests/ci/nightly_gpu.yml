@@ -31,3 +31,6 @@ jobs:
   steps:
 
   - bash: echo This is a test $(test)
+
+- job : bash
+
