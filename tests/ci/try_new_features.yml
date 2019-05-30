@@ -8,16 +8,16 @@
 # NOTE: start with cpu to make sure everything still works
 #
 # use variable group name
+jobs:
+- job : Setup
 variables:
 - group: AzureKeyVaultSecrets
 - name  : 'test'
   value : 'tests/ci/run_pytest.py'
 - name  : 'testfolder'
   value : './tests/unit'
-- name  : 'testmarkers'
-  value : '"not notebooks and not spark and gpu"'
-- name  : 'junitxml'
-  value : 'reports/test-unit.xml'
+- name  : 'clustername'
+  value : 'Reco-gpu-test'
 #   
 - name  : 'maxnodes'
   value : 4
@@ -29,18 +29,12 @@ variables:
   value : 'Recommenders'
 - name  : 'branch'
   value : 'azure-pipelines-bz'
-- name  : 'clustername'
-  value : 'Reco-gpu-test'
 # GPU
 - name  : 'vmsize'
   value : 'STANDARD_NC6'
 # CPU
 #- name  : 'vmsize'
 #  value : 'STANDARD_D3_V2'
-- name  : 'dockerproc'
-  value : 'gpu'
-- name  : 'expname'
-  value : 'gpu_unit_tests'
 
 #trigger:
 #- azure-pipelines-bz
@@ -93,6 +87,17 @@ steps:
      pip install --upgrade azureml-sdk[cli]
   displayName: 'install cli'
 
+- job : Smoke
+variables:
+- name  : 'dockerproc'
+  value : 'gpu'
+- name  : 'expname'
+  value : 'gpu_unit_tests'
+- name  : 'testmarkers'
+  value : '"not notebooks and not spark and gpu"'
+- name  : 'junitxml'
+  value : 'reports/test-smoke.xml'
+
 - script: 
     python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
@@ -103,3 +108,14 @@ steps:
     testResultsFiles: '**/test-*.xml'
     failTaskOnFailedTests: true
   condition: succeededOrFailed()
+
+  - job : Integration
+  variables:
+- name  : 'dockerproc'
+  value : 'gpu'
+- name  : 'expname'
+  value : 'gpu_unit_tests'
+- name  : 'testmarkers'
+  value : '"not notebooks and not spark and gpu"'
+- name  : 'junitxml'
+  value : 'reports/test-integration.xml'
