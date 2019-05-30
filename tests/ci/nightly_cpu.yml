@@ -17,7 +17,7 @@ variables:
 - name  : 'testmarkers'
   value : '"smoke and not spark and not gpu"'
 - name  : 'junitxml'
-  value : 'reports/test-smoke.xml'
+  value : 3
 - name  : 'maxnodes'
   value : 4
 #- name  : 'rg'

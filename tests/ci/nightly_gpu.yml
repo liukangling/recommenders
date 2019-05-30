@@ -41,7 +41,7 @@ jobs:
   - name  : 'testmarkers'
     value : '"smoke and not spark and not gpu"'
   - name  : 'junitxml'
-    value : 'reports/test-smoke.xml'
+    value : 3
   - name  : 'clustername'
     value : 'reco-nightly-cpu'
   - name  : 'expname'
@@ -57,6 +57,28 @@ jobs:
 
   - bash: echo This is a test $(test)
   - template: env-setup.yml # template reference
-    
+# add conda activate here
 - job : b
 
+  variables:
+  - group: AzureKeyVaultSecrets
+  - name  : 'testfolder'
+    value : './tests/integration'
+  - name  : 'testmarkers'
+    value : '"integration and not spark and not gpu"'
+  - name  : 'junitxml'
+    value : 3
+  - name  : 'clustername'
+    value : 'reco-nightly-cpu'
+  - name  : 'expname'
+    value : 'nightly_integration_cpu'
+     trigger: none
+
+  pr: none
+#- staging 
+#- master
+
+  steps:
+
+  - bash: echo This is a test $(test)
+  - template: env-setup.yml # template reference
