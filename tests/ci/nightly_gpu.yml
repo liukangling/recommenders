@@ -55,7 +55,8 @@ jobs:
 
   - script: | 
      az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-  - bash: echo This is a test $(test)
+  displayName: 'Login to Azure'
+
   - template: env-setup.yml # template reference
 
   - script: 
@@ -91,7 +92,6 @@ jobs:
 
   steps:
 
-  - bash: echo This is a test $(test)
   - template: env-setup.yml # template reference
 
   - script: 
