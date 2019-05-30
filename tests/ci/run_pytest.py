@@ -66,8 +66,8 @@ def run_pytest(test_folder,
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    junit_str = "--junitxml="+args.junitxml
-    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junit_str])
+    
+    print('pytest run:', ["pytest", test_folder, "-m", test_markers, args.junitxml])
     subprocess.run(["pytest", test_folder, "-m", test_markers, junit_str])
 
     #  files for AzureML
