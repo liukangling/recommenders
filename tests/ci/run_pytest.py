@@ -33,7 +33,7 @@ def create_arg_parser():
     # test results file
     parser.add_argument("--xmlname", "-j",
                         action="store",
-                        default="reports/test-unit.xml",
+                        default="1",
                         help="Test results")
 
     args = parser.parse_args()
@@ -66,9 +66,17 @@ def run_pytest(test_folder,
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
+    if junitxml == 1:
+            junitxml_str = "--junitxml=reports/test-unit.xml"
+    elif junitxml == 2:
+            junitxml_str = "--junitxml=reports/test-nightly.xml"
+    elif junitxml == 3:
+            junitxml_str = "--junitxml=reports/test-nightly-cpu.xml"
+    elif junitxml == 4:
+            junitxml_str = "--junitxml=reports/test-nightly-gpu.xml"
 
     print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml])
-    subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml])
+    subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml_str])
 
     #  files for AzureML
     name_of_upload = "reports"

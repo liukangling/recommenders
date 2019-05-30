@@ -218,6 +218,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     Return:
           run : AzureML run or trial
     """
+
     print('submit: testfolder', test_folder)
     print("junitxml:", junitxml)
     project_folder = "."
@@ -269,7 +270,7 @@ def create_arg_parser():
     # test summary file
     parser.add_argument("--junitxml",
                         action="store",
-                        default="reports/test-unit.xml",
+                        default=1,
                         help="file for returned test results")
     # max num nodes in Azure cluster
     parser.add_argument("--maxnodes",
@@ -379,7 +380,6 @@ if __name__ == "__main__":
     print("exp: watch for experiment in azure named ", args.expname)
     # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
-    junitxml = '--junitxml='+args.junitxml
     run = submit_experiment_to_azureml(test=args.test,
                                        test_folder=args.testfolder,
                                        test_markers=args.testmarkers,
