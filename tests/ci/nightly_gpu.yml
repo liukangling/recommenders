@@ -53,6 +53,8 @@ jobs:
 
   steps:
 
+  - script: | 
+     az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
   - bash: echo This is a test $(test)
   - template: env-setup.yml # template reference
 
@@ -86,7 +88,7 @@ jobs:
     value : 'reco-nightly-cpu'
   - name  : 'expname'
     value : 'nightly_integration_cpu'
-     trigger: none
+    trigger: none
 
   steps:
 
