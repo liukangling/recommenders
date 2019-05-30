@@ -30,4 +30,4 @@ jobs:
 
   steps:
 
-  - bash: echo $(test)
+  - bash: echo This is a test $(test)
