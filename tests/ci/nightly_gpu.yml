@@ -19,11 +19,11 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
 
-#trigger:
+  trigger: none
 #- azure-pipelines-bz
 # 
 
-#pr:
+  pr: none
 #- staging 
 #- master
   
@@ -32,5 +32,5 @@ jobs:
 
   - bash: echo This is a test $(test)
 
-- job : bash
+- job : b
 
