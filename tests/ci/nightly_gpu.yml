@@ -57,11 +57,11 @@ jobs:
      az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
   displayName: 'Login to Azure'
 
-  - template: env-setup.yml # template reference
+#  - template: env-setup.yml # template reference
 
-  - script: 
-     python scripts/generate_conda_file.py --cpu --name reco 
-  displayName: ' generate_conda_file.py'
+#  - script: 
+#     python scripts/generate_conda_file.py --cpu --name reco 
+#  displayName: ' generate_conda_file.py'
   
 #  - script: 
 #    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
@@ -75,36 +75,3 @@ jobs:
 #  condition: succeededOrFailed()
 
 - job : Integration
-  pool:
-    vmImage: 'ubuntu-16.04'
-  variables:
-  - group: AzureKeyVaultSecrets
-  - name  : 'testfolder'
-    value : './tests/integration'
-  - name  : 'testmarkers'
-    value : '"integration and not spark and not gpu"'
-  - name  : 'junitxml'
-    value : 3
-  - name  : 'clustername'
-    value : 'reco-nightly-cpu'
-  - name  : 'expname'
-    value : 'nightly_integration_cpu'
-
-  steps:
-
-  - template: env-setup.yml # template reference
-
-  - script: 
-     python scripts/generate_conda_file.py --cpu --name reco 
-  displayName: ' generate_conda_file.py'
-  
-#  - script: 
-#    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-#  displayName: 'submit_azureml_pytest'
-
-#- task: PublishTestResults@2
-#  displayName: 'Publish Test Results **/test-*.xml'
-#  inputs:
-#    testResultsFiles: '**/test-*.xml'
-#    failTaskOnFailedTests: true
-#  condition: succeededOrFailed()
