@@ -15,17 +15,17 @@ variables:
 #  value : 'recommender'
 #- name  : 'wsname'
 #  value : 'RecoWS'
-  'reponame' : 'Recommenders'
-- name  : 'branch'
-  value : 'azure-pipelines-bz'
+#  'reponame' : 'Recommenders'
+#- name  : 'branch'
+#  value : 'azure-pipelines-bz'
 # GPU
 #- name  : 'vmsize'
 #  value : 'STANDARD_NC6'
 # CPU
-- name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
-- name  : 'dockerproc'
-  value : '--cpu'
+#- name  : 'vmsize'
+#  value : 'STANDARD_D3_V2'
+#- name  : 'dockerproc'
+#  value : '--cpu'
 
 jobs:
 - job : Smoke
