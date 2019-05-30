@@ -14,8 +14,6 @@ variables:
 - group: AzureKeyVaultSecrets
 - name  : 'test'
   value : 'tests/ci/run_pytest.py'
-- name  : 'testfolder'
-  value : './tests/unit'
 - name  : 'clustername'
   value : 'Reco-gpu-test'
 #   
@@ -92,12 +90,13 @@ variables:
 - name  : 'dockerproc'
   value : 'gpu'
 - name  : 'expname'
-  value : 'gpu_unit_tests'
+  value : 'gpu_smoke_tests'
 - name  : 'testmarkers'
   value : '"not notebooks and not spark and gpu"'
 - name  : 'junitxml'
   value : 'reports/test-smoke.xml'
-
+- name  : 'testfolder'
+  value : './tests/unit'
 - script: 
     python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
