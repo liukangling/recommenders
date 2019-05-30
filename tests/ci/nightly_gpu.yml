@@ -28,6 +28,6 @@ jobs:
 #- master
   
 
-steps:
+  steps:
 
-- bash: echo $(test)
+  - bash: echo $(test)
