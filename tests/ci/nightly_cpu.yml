@@ -45,7 +45,7 @@ trigger: none
 #- azure-pipelines-bz
 # 
 
-#pr:
+pr: none
 #- staging 
 #- master
   
