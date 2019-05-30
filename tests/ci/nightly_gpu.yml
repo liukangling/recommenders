@@ -88,7 +88,6 @@ jobs:
     value : 'reco-nightly-cpu'
   - name  : 'expname'
     value : 'nightly_integration_cpu'
-    trigger: none
 
   steps:
 
