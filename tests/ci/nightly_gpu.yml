@@ -19,11 +19,11 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
 
-#trigger:
+  trigger: none
 #- azure-pipelines-bz
 # 
 
-#pr:
+  pr: none
 #- staging 
 #- master
   
@@ -31,3 +31,6 @@ jobs:
   steps:
 
   - bash: echo This is a test $(test)
+  - template: env-setup.yml # template reference
+- job : b
+
