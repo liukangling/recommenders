@@ -66,6 +66,8 @@ def run_pytest(test_folder,
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
+    # workaround for odd behavior when passing --junitxml=
+    # from submit_azureml_pytest
     if junitxml == 1:
             junitxml_str = "--junitxml=reports/test-unit.xml"
     elif junitxml == 2:
@@ -75,7 +77,8 @@ def run_pytest(test_folder,
     elif junitxml == 4:
             junitxml_str = "--junitxml=reports/test-nightly-gpu.xml"
 
-    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml_str])
+    print('pytest run:',
+          ["pytest", test_folder, "-m", test_markers, junitxml_str])
     subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml_str])
 
     #  files for AzureML
