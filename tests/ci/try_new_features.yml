@@ -1,4 +1,4 @@
-# nightly_cpu.yml
+# gpu_unit_test.yml
 # Starter pipeline
 # Start with a minimal pipeline that you can customize to build and deploy your code.
 # Add steps that build, run tests, deploy, and more:
@@ -15,9 +15,9 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"smoke and not spark and not gpu"'
+  value : '"not notebooks and not spark and gpu"'
 - name  : 'junitxml'
-  value : '"reports/test-smoke.xml"'
+  value : 'reports/test-unit.xml'
 #   
 - name  : 'maxnodes'
   value : 4
@@ -30,17 +30,17 @@ variables:
 - name  : 'branch'
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
-  value : 'reco-nightly-cpu'
+  value : 'Reco-gpu-test'
 # GPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_NC6'
-# CPU
 - name  : 'vmsize'
-  value : 'STANDARD_D3_V2'
+  value : 'STANDARD_NC6'
+# CPU
+#- name  : 'vmsize'
+#  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : '--cpu'
+  value : 'gpu'
 - name  : 'expname'
-  value : 'nightly_smoke_cpu'
+  value : 'gpu_unit_tests'
 
 #trigger:
 #- azure-pipelines-bz
@@ -76,7 +76,7 @@ steps:
   displayName: 'install azureml-sdk'
   
 - script: 
-     python scripts/generate_conda_file.py --name reco 
+     python scripts/generate_conda_file.py --gpu --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
@@ -94,7 +94,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
