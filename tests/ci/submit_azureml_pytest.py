@@ -349,8 +349,8 @@ def create_arg_parser():
 
 if __name__ == "__main__":
     logger = logging.getLogger("submit_azureml_pytest.py")
-    logger.setLevel(logging.DEBUG)
-    logging.basicConfig(level=logging.DEBUG)
+    #logger.setLevel(logging.DEBUG)
+    #logging.basicConfig(level=logging.DEBUG)
     args = create_arg_parser()
 
     if (args.dockerproc == "cpu"):
