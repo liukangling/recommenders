@@ -42,7 +42,7 @@ variables:
 - name  : 'expname'
   value : 'gpu_unit_tests'
 
-#trigger:
+trigger: none
 #- azure-pipelines-bz
 # 
 
