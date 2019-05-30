@@ -10,39 +10,14 @@
 # use variable group name
 variables:
  'test': 'tests/ci/run_pytest.py'
+
 jobs:
 - job : A
-variables:
-- group: AzureKeyVaultSecrets
-- name  : 'testfolder'
-  value : './tests/unit'
-- name  : 'testmarkers'
-  value : '"not notebooks and not spark and gpu"'
-- name  : 'junitxml'
-  value : 'reports/test-unit.xml'
-#   
-- name  : 'maxnodes'
-  value : 4
-#- name  : 'rg'
-#  value : 'recommender'
-#- name  : 'wsname'
-#  value : 'RecoWS'
-- name  : 'reponame'
-  value : 'Recommenders'
-- name  : 'branch'
-  value : 'azure-pipelines-bz'
-- name  : 'clustername'
-  value : 'Reco-gpu-test'
-# GPU
-- name  : 'vmsize'
-  value : 'STANDARD_NC6'
-# CPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_D3_V2'
-- name  : 'dockerproc'
-  value : 'gpu'
-- name  : 'expname'
-  value : 'gpu_unit_tests'
+  pool:
+  vmImage: 'ubuntu-16.04'
+
+  variables:
+  - group: AzureKeyVaultSecrets
 
 #trigger:
 #- azure-pipelines-bz
@@ -52,57 +27,7 @@ variables:
 #- staging 
 #- master
   
-pool:
-vmImage: 'ubuntu-16.04'
 
 steps:
 
 - bash: echo $(test)
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.6'
-    architecture: 'x64'
-  displayName: 'Use Python 3.6'
-
-- script: | 
-   az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-   
-  displayName: 'Login to Azure'
-
-- bash: |
-    echo "##vso[task.prependpath]/data/anaconda/bin"
-  displayName: Add Conda to PATH
-
-- script: 
-     pip install azureml-sdk
-  continueOnError: true
-  displayName: 'install azureml-sdk'
-  
-- script: 
-     python scripts/generate_conda_file.py --gpu --name reco 
-  displayName: ' generate_conda_file.py'
-
-- script: |
-     chmod +x scripts/*.py
-     ls -al scripts
-     chmod +x tests/ci/*.py
-     ls -al tests/ci
-     pwd
-     ls -al
-  displayName: 'ls'
-
-- script: |
-     pip install azure-cli
-     pip install --upgrade azureml-sdk[cli]
-  displayName: 'install cli'
-
-- script: 
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-  displayName: 'submit_azureml_pytest'
-
-- task: PublishTestResults@2
-  displayName: 'Publish Test Results **/test-*.xml'
-  inputs:
-    testResultsFiles: '**/test-*.xml'
-    failTaskOnFailedTests: true
-  condition: succeededOrFailed()
