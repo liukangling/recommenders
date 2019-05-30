@@ -39,6 +39,7 @@ def create_arg_parser():
     args = parser.parse_args()
     return(args)
 
+
 def run_pytest(test_folder,
                test_markers,
                junitxml):
@@ -65,9 +66,9 @@ def run_pytest(test_folder,
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    
-    print('pytest run:', ["pytest", test_folder, "-m", test_markers, args.junitxml])
-    subprocess.run(["pytest", test_folder, "-m", test_markers, junit_str])
+
+    print('pytest run:', ["pytest", test_folder, "-m", test_markers, junitxml])
+    subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml])
 
     #  files for AzureML
     name_of_upload = "reports"
@@ -87,8 +88,8 @@ if __name__ == "__main__":
     args = create_arg_parser()
 
     # run_pytest()
-   
-    print(('junit_xml', args.xmlname)
+
+    print('junit_xml', args.xmlname)
     run_pytest(test_folder=args.testfolder,
                test_markers=args.testmarkers,
                junitxml=args.xmlname)
