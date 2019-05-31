@@ -36,27 +36,19 @@ def create_arg_parser():
                         default=1,
                         help="Test results")
 
-    args = parser.parse_args()
-    return(args)
 
+if __name__ == "__main__":
 
-def run_pytest(test_folder,
-               test_markers,
-               junitxml):
+    args = create_arg_parser()
+
+    # run_pytest()
+
+    print('junit_xml', args.xmlname)
     '''
-    This is the script that is submitted to AzureML to run pytest.
-
-    Args:
-         test_folder  (str): folder that contains the tests that pytest runs
-         test_markers (str): test markers used by pytest "not notebooks and
-                             not spark and not gpu"
-         junitxml     (str): file of output summary of tests run
-                             note "--junitxml" is required as part of
-                             the string
-                                Example: "--junitxml=reports/test-unit.xml"
-    Return: none
-
-    '''
+    run_pytest(test_folder=args.testfolder,
+               test_markers=args.testmarkers,
+               junitxml=args.xmlname)
+'''
     # Run.get_context() is needed to save context as pytest causes corruption
     # of env vars
     run = Run.get_context()
@@ -66,41 +58,27 @@ def run_pytest(test_folder,
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    # workaround for odd behavior when passing --junitxml=
-    # from submit_azureml_pytest
-    if junitxml == 1:
-            junitxml_str = "--junitxml=reports/test-unit.xml"
-    elif junitxml == 2:
-            junitxml_str = "--junitxml=reports/test-nightly.xml"
-    elif junitxml == 3:
-            junitxml_str = "--junitxml=reports/test-nightly-cpu.xml"
-    elif junitxml == 4:
-            junitxml_str = "--junitxml=reports/test-nightly-gpu.xml"
-
+    print("args.junitxml", args.junitxml)
+    print("junit=", "--junitxml="+args.junitxml)
     print('pytest run:',
-          ["pytest", test_folder, "-m", test_markers, junitxml_str])
-    subprocess.run(["pytest", test_folder, "-m", test_markers, junitxml_str])
+          ["pytest",
+           args.test_folder,
+           "-m",
+           args.test_markers,
+           "--junitxml="+args.junitxml])
+    exit()
+    subprocess.run(["pytest",
+                    args.test_folder,
+                    "-m",
+                    args.test_markers,
+                    "--junitxml="+args.junitxml])
+    # Leveraged code from this  notebook:
+    # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
+    # print(("os.listdir files", os.listdir("."))
+    # print(("os.listdir reports", os.listdir("./reports"))
+    # print(("os.listdir outputs", os.listdir("./outputs"))
 
     #  files for AzureML
     name_of_upload = "reports"
     path_on_disk = "./reports"
     run.upload_folder(name_of_upload, path_on_disk)
-
-    # print(("os.listdir files", os.listdir("."))
-    # print(("os.listdir reports", os.listdir("./reports"))
-    # print(("os.listdir outputs", os.listdir("./outputs"))
-
-    # Leveraged code from this  notebook:
-    # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
-
-
-if __name__ == "__main__":
-
-    args = create_arg_parser()
-
-    # run_pytest()
-
-    print('junit_xml', args.xmlname)
-    run_pytest(test_folder=args.testfolder,
-               test_markers=args.testmarkers,
-               junitxml=args.xmlname)

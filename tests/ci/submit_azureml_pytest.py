@@ -270,7 +270,7 @@ def create_arg_parser():
     # test summary file
     parser.add_argument("--junitxml",
                         action="store",
-                        default=1,
+                        default="reports/test-unit.xml",
                         help="file for returned test results")
     # max num nodes in Azure cluster
     parser.add_argument("--maxnodes",
