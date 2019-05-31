@@ -35,7 +35,9 @@ def create_arg_parser():
                         action="store",
                         default="reports/test-unit.xml",
                         help="Test results")
+    args = parser.parse_args()
 
+    return(args)
 
 if __name__ == "__main__":
 
