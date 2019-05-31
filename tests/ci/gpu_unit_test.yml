@@ -36,8 +36,6 @@ variables:
   value : 'gpu_unit_tests'
 
 trigger: none
-#- azure-pipelines-bz
-# 
 
 pr:
 - staging 
