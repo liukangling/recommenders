@@ -62,11 +62,15 @@ jobs:
 
   - script: 
       python scripts/generate_conda_file.py --cpu --name reco 
-  displayName: ' generate_conda_file.py'
-  
+    displayName: ' generate_conda_file.py'
+
+  - script: 
+      python scripts/generate_conda_file.py --cpu --name reco 
+    displayName: ' generate_conda_file.py'
+
   - script: 
       python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-  displayName: 'submit_azureml_pytest'
+    displayName: 'submit_azureml_pytest'
 
   - task: PublishTestResults@2
     displayName: 'Publish Test Results **/test-*.xml'
