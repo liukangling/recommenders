@@ -1,13 +1,6 @@
-# gpu_unit_test.yml
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
 #
-#
-# NOTE: start with cpu to make sure everything still works
-#
-# use variable group name
 variables:
   test: 'tests/ci/run_pytest.py'
   maxnodes : 4
@@ -17,9 +10,9 @@ variables:
   wsname   : 'RecoWS'
 # GPU
   vmsize   : 'STANDARD_NC6'
-# CPU
-# vmsize'  : 'STANDARD_D3_V2'
-  dockerproc : 'gpu'
+ CPU
+  vmsize'  : 'STANDARD_D3_V2'
+  dockerproc : 'cpu'
 
 trigger: none
 
@@ -36,15 +29,15 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
-    value : './tests/smoke'
+    value : './tests/unit'
   - name  : 'testmarkers'
-    value : '"smoke and not spark and gpu"'
+    value : '"not smoke and not spark and not gpu"'
   - name  : 'junitxml'
     value : 'reports/test-unit.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-gpu'
+    value : 'reco-nightly-cpu'
   - name  : 'expname'
-    value : 'nightly_smoke_gpu'
+    value : 'nightly_smoke_cpu'
 
   steps:
 
