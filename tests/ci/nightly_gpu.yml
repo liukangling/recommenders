@@ -13,21 +13,14 @@ variables:
   maxnodes : 4
   reponame : 'Recommenders'
   branch   : 'azure-pipelines-bz'
-#- name  : 'rg'
-#  value : 'recommender'
-#- name  : 'wsname'
-#  value : 'RecoWS'
-#  'reponame' : 'Recommenders'
-#- name  : 'branch'
-#  value : 'azure-pipelines-bz'
+  rg       : 'recommender'
+  wsname   : 'RecoWS'
+  branch   : 'azure-pipelines-bz'
 # GPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_NC6'
+  vmsize   : 'STANDARD_NC6'
 # CPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_D3_V2'
-#- name  : 'dockerproc'
-#  value : '--cpu'
+# vmsize'  : 'STANDARD_D3_V2'
+  dockerproc : 'gpu'
 
 trigger: none
 
