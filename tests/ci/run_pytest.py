@@ -33,7 +33,7 @@ def create_arg_parser():
     # test results file
     parser.add_argument("--xmlname", "-j",
                         action="store",
-                        default=1,
+                        default="reports/test-unit.xml",
                         help="Test results")
 
 
@@ -58,14 +58,14 @@ if __name__ == "__main__":
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    print("args.junitxml", args.junitxml)
-    print("junit=", "--junitxml="+args.junitxml)
+    print("args.junitxml", args.xmlname)
+    print("junit=", "--junitxml="+args.xmlname)
     print('pytest run:',
           ["pytest",
            args.test_folder,
            "-m",
            args.test_markers,
-           "--junitxml="+args.junitxml])
+           "--junitxml="+args.xmlname])
     exit()
     subprocess.run(["pytest",
                     args.test_folder,
