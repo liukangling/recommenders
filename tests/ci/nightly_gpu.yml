@@ -39,13 +39,13 @@ jobs:
   - name  : 'testfolder'
     value : './tests/smoke'
   - name  : 'testmarkers'
-    value : '"smoke and not spark and not gpu"'
+    value : '"smoke and not spark and gpu"'
   - name  : 'junitxml'
     value : 3
   - name  : 'clustername'
-    value : 'reco-nightly-cpu'
+    value : 'reco-nightly-gpu'
   - name  : 'expname'
-    value : 'nightly_smoke_cpu'
+    value : 'nightly_smoke_gpu'
 
   steps:
 
