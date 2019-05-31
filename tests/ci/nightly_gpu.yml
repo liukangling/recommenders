@@ -29,11 +29,11 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
-    value : './tests/unit'
+    value : './tests/smoke'
   - name  : 'testmarkers'
-    value : '"not smoke and not spark and not gpu"'
+    value : '"smoke and not spark and not gpu"'
   - name  : 'junitxml'
-    value : 'reports/test-unit.xml'
+    value : 'reports/test-smoke.xml'
   - name  : 'clustername'
     value : 'reco-nightly-cpu'
   - name  : 'expname'
