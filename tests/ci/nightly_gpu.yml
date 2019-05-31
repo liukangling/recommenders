@@ -15,7 +15,6 @@ variables:
   branch   : 'azure-pipelines-bz'
   rg       : 'recommender'
   wsname   : 'RecoWS'
-  branch   : 'azure-pipelines-bz'
 # GPU
   vmsize   : 'STANDARD_NC6'
 # CPU
