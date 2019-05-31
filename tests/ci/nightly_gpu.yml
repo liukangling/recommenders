@@ -11,6 +11,8 @@
 variables:
   test: 'tests/ci/run_pytest.py'
   maxnodes : 4
+  reponame : 'Recommenders'
+  branch   : 'azure-pipelines-bz'
 #- name  : 'rg'
 #  value : 'recommender'
 #- name  : 'wsname'
