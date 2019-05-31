@@ -66,7 +66,7 @@ if __name__ == "__main__":
           ["pytest",
            args.testfolder,
            "-m",
-           args.test_markers,
+           args.testmarkers,
            "--junitxml="+args.xmlname])
     subprocess.run(["pytest",
                     args.testfolder,
