@@ -64,7 +64,7 @@ if __name__ == "__main__":
     print("junit=", "--junitxml="+args.xmlname)
     print('pytest run:',
           ["pytest",
-           args.test_folder,
+           args.testfolder,
            "-m",
            args.test_markers,
            "--junitxml="+args.xmlname])
