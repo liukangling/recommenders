@@ -71,10 +71,10 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
     Returns:
         ws: workspace reference
     """
-    print('setup: workspace_name is ', workspace_name)
-    print('setup: resource_group is ', resource_group)
-    print('setup: subid is ', subscription_id)
-    print('setup: location is ', location)
+    logger.debug('setup: workspace_name is ', workspace_name)
+    logger.debug('setup: resource_group is ', resource_group)
+    logger.debug('setup: subid is ', subscription_id)
+    logger.debug('setup: location is ', location)
 
     try:
             # use existing workspace if there is one
@@ -86,7 +86,7 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
             )
     except WorkspaceException:
             # this call might take a minute or two.
-            print("Creating new workspace")
+            logger.debug("Creating new workspace")
             ws = Workspace.create(
                 name=workspace_name,
                 subscription_id=subscription_id,
@@ -122,14 +122,14 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
     # setting vmsize and num nodes creates a persistent AzureML
     # compute resource
 
-    print("setup: cluster_name", cluster_name)
+    logger.debug("setup: cluster_name", cluster_name)
     # https://docs.microsoft.com/en-us/azure/machine-learning/service/how-to-set-up-training-targets
 
     try:
         cpu_cluster = ComputeTarget(workspace=workspace, name=cluster_name)
-        print('setup: Found existing cluster, use it.')
+        logger.debug('setup: Found existing cluster, use it.')
     except ComputeTargetException:
-        print("setup: create cluster")
+        logger.debug("setup: create cluster")
         compute_config = AmlCompute.provisioning_configuration(
                        vm_size=vm_size,
                        max_nodes=max_nodes)
@@ -190,7 +190,7 @@ def create_experiment(workspace, experiment_name):
         exp - AzureML experiment
     """
 
-    print("create: experiment_name ", experiment_name)
+    logger.debug("create: experiment_name ", experiment_name)
     exp = Experiment(workspace=workspace, name=experiment_name)
     return(exp)
 
@@ -219,8 +219,8 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
           run : AzureML run or trial
     """
 
-    print('submit: testfolder', test_folder)
-    print("junitxml:", junitxml)
+    logger.debug('submit: testfolder', test_folder)
+    logger.debug("junitxml:", junitxml)
     project_folder = "."
 
     script_run_config = ScriptRunConfig(source_directory=project_folder,
@@ -240,7 +240,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     # test logs can also be found on azure
     # go to azure portal to see log in azure ws and look for experiment name
     # and look for individual run
-    print('files', run.get_file_names())
+    logger.debug('files', run.get_file_names())
 
     return(run)
 
@@ -335,12 +335,8 @@ def create_arg_parser():
     # github pull request, stored in AzureML experiment for info purposes
     parser.add_argument("--pr",
                         action="store",
-                        default="--pr MyPR",
+                        default="--pr PRTestRun",
                         help="If a pr triggered the test, list it here")
-    # cpu or gpu run
-    parser.add_argument("--cpu",
-                        action="store_true",
-                        help="If run uses a CPU")
 
     args = parser.parse_args()
 
@@ -378,10 +374,8 @@ if __name__ == "__main__":
                                    docker_proc_type=docker_proc_type,
                                    conda_env_file=args.condafile)
 
-    print("exp: watch for experiment in azure named ", args.expname)
-    print("newline")
-    print("args.junitxml", args.junitxml)
-    print("blank")
+    print("exp: In Azure, look for experiment named ", args.expname)
+
     # create new or use existing experiment
     experiment = Experiment(workspace=workspace, name=args.expname)
     run = submit_experiment_to_azureml(test=args.test,

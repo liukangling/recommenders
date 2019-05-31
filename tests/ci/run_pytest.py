@@ -9,6 +9,8 @@ are set otherwise.
 
 import argparse
 import subprocess
+import logging
+import os
 
 from azureml.core import Run
 
@@ -39,18 +41,13 @@ def create_arg_parser():
 
     return(args)
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
+    logger = logging.getLogger("submit_azureml_pytest.py")
     args = create_arg_parser()
 
-    # run_pytest()
+    logger.debug('junit_xml', args.xmlname)
 
-    print('junit_xml', args.xmlname)
-    '''
-    run_pytest(test_folder=args.testfolder,
-               test_markers=args.testmarkers,
-               junitxml=args.xmlname)
-'''
     # Run.get_context() is needed to save context as pytest causes corruption
     # of env vars
     run = Run.get_context()
@@ -60,24 +57,24 @@ if __name__ == "__main__":
                     "-m", "not notebooks and not spark and not gpu",
                     "--junitxml=reports/test-unit.xml"])
     '''
-    print("args.junitxml", args.xmlname)
-    print("junit=", "--junitxml="+args.xmlname)
-    print('pytest run:',
-          ["pytest",
-           args.testfolder,
-           "-m",
-           args.testmarkers,
-           "--junitxml="+args.xmlname])
+    logger.debug("args.junitxml", args.xmlname)
+    logger.debug("junit=", "--junitxml="+args.xmlname)
+    logger.info('pytest run:',
+                ["pytest",
+                 args.testfolder,
+                 "-m",
+                 args.testmarkers,
+                 "--junitxml="+args.xmlname])
     subprocess.run(["pytest",
                     args.testfolder,
                     "-m",
                     args.testmarkers,
                     "--junitxml="+args.xmlname])
+    #
     # Leveraged code from this  notebook:
     # https://msdata.visualstudio.com/Vienna/_search?action=contents&text=upload_folder&type=code&lp=code-Project&filters=ProjectFilters%7BVienna%7DRepositoryFilters%7BAzureMlCli%7D&pageSize=25&sortOptions=%5B%7B%22field%22%3A%22relevance%22%2C%22sortOrder%22%3A%22desc%22%7D%5D&result=DefaultCollection%2FVienna%2FAzureMlCli%2FGBmaster%2F%2Fsrc%2Fazureml-core%2Fazureml%2Fcore%2Frun.py
-    # print(("os.listdir files", os.listdir("."))
-    # print(("os.listdir reports", os.listdir("./reports"))
-    # print(("os.listdir outputs", os.listdir("./outputs"))
+    logger.debug("os.listdir files", os.listdir("."))
+    logger.debug("os.listdir reports", os.listdir("./reports"))
 
     #  files for AzureML
     name_of_upload = "reports"
