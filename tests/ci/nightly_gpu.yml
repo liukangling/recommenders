@@ -10,7 +10,7 @@ variables:
   wsname   : 'RecoWS'
 # GPU
   vmsize   : 'STANDARD_NC6'
- CPU
+# CPU
   vmsize'  : 'STANDARD_D3_V2'
   dockerproc : 'cpu'
 
