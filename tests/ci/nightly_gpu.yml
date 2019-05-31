@@ -40,7 +40,7 @@ jobs:
   - name  : 'testmarkers'
     value : '"smoke and not spark and gpu"'
   - name  : 'junitxml'
-    value : 3
+    value : 'reports/test-unit.xml'
   - name  : 'clustername'
     value : 'reco-nightly-gpu'
   - name  : 'expname'
