@@ -31,13 +31,13 @@ jobs:
   - name  : 'testfolder'
     value : './tests/smoke'
   - name  : 'testmarkers'
-    value : '"smoke and not spark and not gpu"'
+    value : '"smoke and not spark and gpu"'
   - name  : 'junitxml'
     value : 'reports/test-smoke.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-cpu'
+    value : 'reco-nightly-gpu'
   - name  : 'expname'
-    value : 'nightly_smoke_cpu'
+    value : 'nightly_smoke_gpu'
 
   steps:
 
@@ -48,7 +48,7 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --name reco 
+      python scripts/generate_conda_file.py --gpu --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
@@ -72,13 +72,13 @@ jobs:
   - name  : 'testfolder'
     value : './tests/integration'
   - name  : 'testmarkers'
-    value : '"integration and not spark and not gpu"'
+    value : '"integration and not spark and gpu"'
   - name  : 'junitxml'
     value : 'reports/test-integration.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-cpu'
+    value : 'reco-nightly-gpu'
   - name  : 'expname'
-    value : 'nightly_integration_cpu'
+    value : 'nightly_integration_gpu'
 
   steps:
 
@@ -89,7 +89,7 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --name reco 
+      python scripts/generate_conda_file.py --gpu --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
