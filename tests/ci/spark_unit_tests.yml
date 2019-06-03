@@ -8,7 +8,7 @@ variables:
 - name  : 'testfolder'
   value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"notebooks and spark and not gpu"'
+  value : '"not notebooks and spark and not gpu"'
 - name  : 'junitxml'
   value : 'reports/test-unit.xml'
 #   
@@ -65,7 +65,7 @@ steps:
   displayName: 'install azureml-sdk'
   
 - script: 
-     python scripts/generate_conda_file.py --gpu --name reco 
+     python scripts/generate_conda_file.py --pyspark --name reco 
   displayName: ' generate_conda_file.py'
 
 - script: |
