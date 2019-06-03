@@ -31,9 +31,9 @@ variables:
 - name  : 'vmsize'
   value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : '--cpu'
+  value : 'cpu'
 - name  : 'expname'
-  value : 'notebooks_unit_tests'
+  value : 'nightly_smoke_cpu'
 
 trigger: none
 #- azure-pipelines-bz
@@ -65,6 +65,7 @@ steps:
 
 - script: 
      pip install azureml-sdk
+  continueOnError: true
   displayName: 'install azureml-sdk'
   
 - script: 
@@ -73,7 +74,11 @@ steps:
 
 - script: |
      chmod +x scripts/*.py
+     ls -al scripts
      chmod +x tests/ci/*.py
+     ls -al tests/ci
+     pwd
+     ls -al
   displayName: 'ls'
 
 - script: |
@@ -82,7 +87,7 @@ steps:
   displayName: 'install cli'
 
 - script: 
-    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
+    python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testfolder $(testfolder) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
 
 - task: PublishTestResults@2
