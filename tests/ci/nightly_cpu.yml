@@ -5,7 +5,7 @@ variables:
 - name  : 'test'
   value : 'tests/ci/run_pytest.py'
 - name  : 'testfolder'
-  value : './tests/unit'
+  value : './tests/smoke'
 - name  : 'testmarkers'
   value : '"smoke and not spark and not gpu"'
 - name  : 'junitxml'
