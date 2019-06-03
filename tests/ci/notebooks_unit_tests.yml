@@ -1,21 +1,15 @@
-# nightly_cpu.yml
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
+
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
 #
-#
-# NOTE: start with cpu to make sure everything still works
-#
-# use variable group name
 variables:
 - group: AzureKeyVaultSecrets
 - name  : 'test'
   value : 'tests/ci/run_pytest.py'
 - name  : 'testfolder'
-  value : './tests/smoke'
+  value : './tests/unit'
 - name  : 'testmarkers'
-  value : '"smoke and not spark and not gpu"'
+  value : '"notebooks and not spark and not gpu"'
 - name  : 'junitxml'
   value : 'reports/test-unit.xml'
 - name  : 'maxnodes'
@@ -39,7 +33,7 @@ variables:
 - name  : 'dockerproc'
   value : '--cpu'
 - name  : 'expname'
-  value : 'nightly_smoke_cpu'
+  value : 'notebooks_unit_tests'
 
 trigger: none
 #- azure-pipelines-bz
@@ -71,7 +65,6 @@ steps:
 
 - script: 
      pip install azureml-sdk
-  continueOnError: true
   displayName: 'install azureml-sdk'
   
 - script: 
@@ -80,11 +73,7 @@ steps:
 
 - script: |
      chmod +x scripts/*.py
-     ls -al scripts
      chmod +x tests/ci/*.py
-     ls -al tests/ci
-     pwd
-     ls -al
   displayName: 'ls'
 
 - script: |
