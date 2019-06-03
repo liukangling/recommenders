@@ -22,7 +22,7 @@ pr: none
 
 jobs:
 - job : Smoke
-  displayName : 'Smoke: Nightly_cpu_test'
+  displayName : 'Smoke: nightly_cpu_test'
   pool:
     vmImage: 'ubuntu-16.04'
 
@@ -64,7 +64,7 @@ jobs:
     condition: succeededOrFailed()
 
 - job : Integration
-  displayName : 'Integration: Nightly_gpu_test_template'
+  displayName : 'Integration: nightly_cpu_test'
   pool:
     vmImage: 'ubuntu-16.04'
 
