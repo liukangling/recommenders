@@ -1,11 +1,3 @@
-# nightly_cpu.yml
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-#
-#
-# NOTE: start with cpu to make sure everything still works
 #
 # use variable group name
 variables:
@@ -39,7 +31,7 @@ variables:
 - name  : 'dockerproc'
   value : 'cpu'
 - name  : 'expname'
-  value : 'nightly_cpu'
+  value : 'nightly_smoke_cpu'
 
 trigger: none
 #- azure-pipelines-bz
