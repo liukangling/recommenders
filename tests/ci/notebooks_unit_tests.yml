@@ -78,7 +78,7 @@ jobs:
   - name  : 'junitxml'
     value : 'reports/test-integration.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-gpu'
+    value : 'reco-nightly-cpu'
   - name  : 'expname'
     value : 'notebooks_integration_cpu'
 
