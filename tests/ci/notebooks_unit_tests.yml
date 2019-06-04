@@ -71,7 +71,6 @@ jobs:
   pool:
     vmImage: 'ubuntu-16.04'
 
-# vars specific to this job
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
