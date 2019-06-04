@@ -32,7 +32,7 @@ variables:
 - name  : 'dockerproc'
   value : 'gpu'
 - name  : 'expname'
-  value : 'nightly_smoke_gpu'
+  value : 'notebooks_smoke_gpu'
 
 trigger: none
 #- azure-pipelines-bz
