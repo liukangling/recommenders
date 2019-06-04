@@ -23,7 +23,7 @@ variables:
 - name  : 'branch'
   value : 'azure-pipelines-bz'
 - name  : 'clustername'
-  value : 'Reco-gpu-test'
+  value : 'Reco-cpu-test'
 # GPU
 - name  : 'vmsize'
   value : 'STANDARD_NC6'
@@ -31,7 +31,7 @@ variables:
 #- name  : 'vmsize'
 #  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
-  value : 'PySpark'
+  value : 'pyspark'
 - name  : 'expname'
   value : 'pyspark_unit_tests'
 
