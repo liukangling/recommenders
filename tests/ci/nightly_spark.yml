@@ -32,7 +32,7 @@ jobs:
   - name  : 'testfolder'
     value : './tests/smoke'
   - name  : 'testmarkers'
-    value : '"smoke and not spark and not gpu"'
+    value : '"smoke and spark and not gpu"'
   - name  : 'junitxml'
     value : 'reports/test-smoke.xml'
   - name  : 'clustername'
@@ -49,7 +49,7 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --name reco 
+      python scripts/generate_conda_file.py --pyspark --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
@@ -74,7 +74,7 @@ jobs:
   - name  : 'testfolder'
     value : './tests/integration'
   - name  : 'testmarkers'
-    value : '"integration and not spark and not gpu"'
+    value : '"integration and spark and not gpu"'
   - name  : 'junitxml'
     value : 'reports/test-integration.xml'
   - name  : 'clustername'
@@ -91,7 +91,7 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --name reco 
+      python scripts/generate_conda_file.py --pyspark --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
