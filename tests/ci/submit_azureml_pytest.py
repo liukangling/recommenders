@@ -356,12 +356,12 @@ if __name__ == "__main__":
     # logging.basicConfig(level=logging.DEBUG)
     args = create_arg_parser()
 
-    if (args.dockerproc == "cpu"):
-        from azureml.core.runconfig import DEFAULT_CPU_IMAGE
-        docker_proc_type = DEFAULT_CPU_IMAGE
-    else:  # gpu or PySpark
+    if (args.dockerproc == "gpu"):
         from azureml.core.runconfig import DEFAULT_GPU_IMAGE
         docker_proc_type = DEFAULT_GPU_IMAGE
+    else:  # cpu or PySpark
+        from azureml.core.runconfig import DEFAULT_CPU_IMAGE
+        docker_proc_type = DEFAULT_CPU_IMAGE
 
     cli_auth = AzureCliAuthentication()
 
