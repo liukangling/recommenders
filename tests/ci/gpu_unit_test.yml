@@ -54,8 +54,8 @@ steps:
   displayName: Add Conda to PATH
 
 - script: 
-     pip install azureml-sdk
-     pip install azure-cli
+     pip install azureml-sdk &&
+     pip install azure-cli &&
      pip install --upgrade azureml-sdk[cli]
   displayName: 'pip install'
   
