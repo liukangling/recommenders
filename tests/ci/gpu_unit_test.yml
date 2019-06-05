@@ -63,11 +63,6 @@ steps:
      python scripts/generate_conda_file.py --gpu --name reco 
   displayName: ' generate_conda_file.py'
 
-- script: |
-     chmod +x scripts/*.py
-     chmod +x tests/ci/*.py
-  displayName: 'ls'
-
 - script: 
     python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
   displayName: 'submit_azureml_pytest'
