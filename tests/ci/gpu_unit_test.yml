@@ -11,13 +11,8 @@ variables:
   value : '"not notebooks and not spark and gpu"'
 - name  : 'junitxml'
   value : 'reports/test-unit.xml'
-#   
 - name  : 'maxnodes'
   value : 4
-#- name  : 'rg'
-#  value : 'recommender'
-#- name  : 'wsname'
-#  value : 'RecoWS'
 - name  : 'reponame'
   value : 'Recommenders'
 - name  : 'branch'
@@ -27,9 +22,6 @@ variables:
 # GPU
 - name  : 'vmsize'
   value : 'STANDARD_NC6'
-# CPU
-#- name  : 'vmsize'
-#  value : 'STANDARD_D3_V2'
 - name  : 'dockerproc'
   value : 'gpu'
 - name  : 'expname'
@@ -63,7 +55,9 @@ steps:
 
 - script: 
      pip install azureml-sdk
-  displayName: 'install azureml-sdk'
+     pip install azure-cli
+     pip install --upgrade azureml-sdk[cli]
+  displayName: 'pip install'
   
 - script: 
      python scripts/generate_conda_file.py --gpu --name reco 
@@ -73,11 +67,6 @@ steps:
      chmod +x scripts/*.py
      chmod +x tests/ci/*.py
   displayName: 'ls'
-
-- script: |
-     pip install azure-cli
-     pip install --upgrade azureml-sdk[cli]
-  displayName: 'install cli'
 
 - script: 
     python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
