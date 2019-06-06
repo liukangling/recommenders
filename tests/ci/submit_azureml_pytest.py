@@ -66,7 +66,7 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
                          associated with a project by tracking or deleting
                          the Resource group.
         cli_auth         Azure authentication
-        location        (str): workspace reference
+        location        (str): Resource location on Azure such as EastUS
 
     Returns:
         ws: workspace reference
@@ -95,7 +95,7 @@ def setup_workspace(workspace_name, subscription_id, resource_group, cli_auth,
                 location=location,
                 auth=cli_auth
             )
-    return ws
+    return(ws)
 
 
 def setup_persistent_compute_target(workspace, cluster_name, vm_size,
@@ -117,7 +117,7 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
         max_nodes    (int): Number of VMs, max_nodes=4 will
                             autoscale up to 4 VMs
     Returns:
-        cpu_cluster : cluster reference
+        cpu_cluster : cluster created by AzureML
     """
     # setting vmsize and num nodes creates a persistent AzureML
     # compute resource
@@ -137,7 +137,7 @@ def setup_persistent_compute_target(workspace, cluster_name, vm_size,
                                            cluster_name,
                                            compute_config)
     cpu_cluster.wait_for_completion(show_output=True)
-    return cpu_cluster
+    return(cpu_cluster)
 
 
 def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
@@ -165,7 +165,16 @@ def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     run_amlcompute = RunConfiguration()
     run_amlcompute.target = cpu_cluster
     run_amlcompute.environment.docker.enabled = True
-    run_amlcompute.environment.docker.base_image = docker_proc_type
+
+    # PySpark has special set up requirements
+    if (docker_proc_type == "PySpark"):
+        run_amlcompute.node_count = 2
+        run_amlcompute.framework = 'PySpark'
+        # run_amlcompute.base_image = "microsoft/mmlspark:0.12"
+        run_amlcompute.base_image = "spark:2.4-cpu"
+        run_amlcompute.environment.docker.base_image_registry.address = "viennaprivate.azurecr.io"
+    else:
+        run_amlcompute.environment.docker.base_image = docker_proc_type
 
     # Use conda_dependencies.yml to create a conda environment in
     # the Docker image for execution
@@ -174,7 +183,7 @@ def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     run_amlcompute.environment.python.user_managed_dependencies = False
     run_amlcompute.environment.python.conda_dependencies = CondaDependencies(
             conda_dependencies_file_path=conda_env_file)
-    return run_amlcompute
+    return(run_amlcompute)
 
 
 def create_experiment(workspace, experiment_name):
@@ -242,7 +251,7 @@ def submit_experiment_to_azureml(test, test_folder, test_markers, junitxml,
     # and look for individual run
     logger.debug('files', run.get_file_names())
 
-    return run
+    return(run)
 
 
 def create_arg_parser():
@@ -349,12 +358,12 @@ if __name__ == "__main__":
     # logging.basicConfig(level=logging.DEBUG)
     args = create_arg_parser()
 
-    if args.dockerproc == "cpu":
-        from azureml.core.runconfig import DEFAULT_CPU_IMAGE
-        docker_proc_type = DEFAULT_CPU_IMAGE
-    else:
+    if (args.dockerproc == "gpu"):
         from azureml.core.runconfig import DEFAULT_GPU_IMAGE
         docker_proc_type = DEFAULT_GPU_IMAGE
+    else:  # cpu or PySpark
+        from azureml.core.runconfig import DEFAULT_CPU_IMAGE
+        docker_proc_type = DEFAULT_CPU_IMAGE
 
     cli_auth = AzureCliAuthentication()
 
