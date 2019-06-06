@@ -183,6 +183,7 @@ def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     run_amlcompute.environment.python.user_managed_dependencies = False
     run_amlcompute.environment.python.conda_dependencies = CondaDependencies(
             conda_dependencies_file_path=conda_env_file)
+    run_amlcompute.environment.python.conda_dependencies.add_conda_package('bottleneck')
     return(run_amlcompute)
 
 
