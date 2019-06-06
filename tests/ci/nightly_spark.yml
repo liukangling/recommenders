@@ -53,8 +53,7 @@ jobs:
     displayName: ' generate_conda_file.py'
 
   - script:
-      cat reco.yaml &&
-      cat reco.yml
+      cat reco.yaml
     displayName: 'cat reco'
     
   - script: 
