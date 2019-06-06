@@ -167,14 +167,14 @@ def create_run_config(cpu_cluster, docker_proc_type, conda_env_file):
     run_amlcompute.environment.docker.enabled = True
 
     # PySpark has special set up requirements
-    if (docker_proc_type == "PySpark"):
-        run_amlcompute.node_count = 2
-        run_amlcompute.framework = 'PySpark'
-        run_amlcompute.base_image = "microsoft/mmlspark:0.12"
+    # if (docker_proc_type == "PySpark"):
+    run_amlcompute.node_count = 2
+    run_amlcompute.framework = 'PySpark'
+    run_amlcompute.base_image = "microsoft/mmlspark:0.12"
         # run_amlcompute.base_image = "spark:2.4-cpu"
         # run_amlcompute.environment.docker.base_image_registry.address = "viennaprivate.azurecr.io"
-    else:
-        run_amlcompute.environment.docker.base_image = docker_proc_type
+    # else:
+    # run_amlcompute.environment.docker.base_image = docker_proc_type
 
     # Use conda_dependencies.yml to create a conda environment in
     # the Docker image for execution
