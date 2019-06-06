@@ -83,6 +83,7 @@ PIP_BASE = {
     "pydocumentdb": "pydocumentdb>=2.3.3",
     "pymanopt": "pymanopt==0.2.3",
     "tqdm": "tqdm==4.31.1",
+    "azureml-core" : "azureml-core",
 }
 
 PIP_GPU = {}
