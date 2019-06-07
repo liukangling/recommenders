@@ -12,7 +12,7 @@ variables:
   vmsize   : 'STANDARD_NC6'
 # CPU
 #  vmsize'  : 'STANDARD_D3_V2'
-  dockerproc : 'cpu'
+  dockerproc : 'gpu'
 
 trigger: none
 
