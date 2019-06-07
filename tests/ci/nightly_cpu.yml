@@ -67,8 +67,8 @@ jobs:
 - job : Integration
   timeoutInMinutes: 90
   displayName : 'Integration: nightly_cpu_test'
-  dependsOn : Smoke
-  condition: succeeded('Smoke')
+  # dependsOn : Smoke
+  # condition: succeeded('Smoke')
   
   pool:
     vmImage: 'ubuntu-16.04'
