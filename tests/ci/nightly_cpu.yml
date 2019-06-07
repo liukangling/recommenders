@@ -22,6 +22,7 @@ pr: none
 
 jobs:
 - job : Smoke
+  timeoutInMinutes: 90
   displayName : 'Smoke: nightly_cpu_test'
   pool:
     vmImage: 'ubuntu-16.04'
@@ -64,6 +65,7 @@ jobs:
     condition: succeededOrFailed()
 
 - job : Integration
+  timeoutInMinutes: 90
   displayName : 'Integration: nightly_cpu_test'
   dependsOn : Smoke
   condition: succeeded('Smoke')
