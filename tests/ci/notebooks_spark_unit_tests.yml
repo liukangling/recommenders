@@ -21,8 +21,8 @@ pr: none
 #- master
 
 jobs:
-- job : Smoke
-  displayName : 'Smoke: notebooks_unit_test'
+- job : Notebooks
+  displayName : 'notebooks_spark_unit_tests'
   pool:
     vmImage: 'ubuntu-16.04'
 
@@ -32,13 +32,13 @@ jobs:
   - name  : 'testfolder'
     value : './tests/smoke'
   - name  : 'testmarkers'
-    value : '"notebooks and not spark and not gpu"'
+    value : '"notebooks and spark and not gpu"'
   - name  : 'junitxml'
-    value : 'reports/test-smoke.xml'
+    value : 'reports/test-notebooks-spark.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-cpu'
+    value : 'reco-nightly-gpu'
   - name  : 'expname'
-    value : 'notebooks_smoke_cpu'
+    value : 'notebooks_spark_gpu'
 
   steps:
 
@@ -49,53 +49,11 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --name reco 
+      python scripts/generate_conda_file.py --gpu --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
       python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID) --testfolder $(testfolder) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
-    displayName: 'submit_azureml_pytest'
-
-  - task: PublishTestResults@2
-    displayName: 'Publish Test Results **/test-*.xml'
-    inputs:
-      testResultsFiles: '**/test-*.xml'
-      failTaskOnFailedTests: true
-    condition: succeededOrFailed()
-
-- job : Integration
-  displayName : 'Integration: notebooks_cpu_test'
-  pool:
-    vmImage: 'ubuntu-16.04'
-
-# vars specific to this job
-  variables:
-  - group: AzureKeyVaultSecrets
-  - name  : 'testfolder'
-    value : './tests/integration'
-  - name  : 'testmarkers'
-    value : '"integration and not spark and not gpu"'
-  - name  : 'junitxml'
-    value : 'reports/test-integration.xml'
-  - name  : 'clustername'
-    value : 'reco-nightly-cpu'
-  - name  : 'expname'
-    value : 'notebooks_integration_cpu'
-
-  steps:
-
-  - script: | 
-      az login --service-principal -u $(ClientID) -p $(ClientSecret) --tenant $(TenantID)
-    displayName: 'Login to Azure'
-
-  - template: env-setup.yml # template reference
-
-  - script: 
-      python scripts/generate_conda_file.py --name reco 
-    displayName: ' generate_conda_file.py'
-
-  - script: 
-      python tests/ci/submit_azureml_pytest.py --subid $(SubscriptionID)  --testfolder $(testfolder) --testmarkers $(testmarkers) --clustername $(clustername) --expname $(expname) --dockerproc $(dockerproc) --junitxml $(junitxml) --reponame $(reponame) --branch $(branch)
     displayName: 'submit_azureml_pytest'
 
   - task: PublishTestResults@2
