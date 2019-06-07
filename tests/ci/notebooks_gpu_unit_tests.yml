@@ -72,9 +72,9 @@ jobs:
   variables:
   - group: AzureKeyVaultSecrets
   - name  : 'testfolder'
-    value : './tests/integration'
+    value : './tests/unit'
   - name  : 'testmarkers'
-    value : '"integration and not spark and gpu"'
+    value : '"notebooks and not spark and gpu"'
   - name  : 'junitxml'
     value : 'reports/test-integration.xml'
   - name  : 'clustername'
