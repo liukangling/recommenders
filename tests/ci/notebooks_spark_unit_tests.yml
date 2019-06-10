@@ -36,9 +36,9 @@ jobs:
   - name  : 'junitxml'
     value : 'reports/test-notebooks-spark.xml'
   - name  : 'clustername'
-    value : 'reco-nightly-gpu'
+    value : 'reco-nightly-cpu'
   - name  : 'expname'
-    value : 'notebooks_spark_gpu'
+    value : 'notebooks_spark_cpu'
 
   steps:
 
@@ -49,7 +49,7 @@ jobs:
   - template: env-setup.yml # template reference
 
   - script: 
-      python scripts/generate_conda_file.py --gpu --name reco 
+      python scripts/generate_conda_file.py --name reco 
     displayName: ' generate_conda_file.py'
 
   - script: 
