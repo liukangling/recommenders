@@ -12,7 +12,7 @@ variables:
   vmsize   : 'STANDARD_NC6'
 # CPU
 #  vmsize'  : 'STANDARD_D3_V2'
-  dockerproc : 'cpu'
+  dockerproc : 'gpu'
 
 trigger: none
 
@@ -68,7 +68,7 @@ jobs:
   dependsOn : Smoke
   timeoutInMinutes: 150
   condition: succeeded('Smoke')
-  
+
   pool:
     vmImage: 'ubuntu-16.04'
 
