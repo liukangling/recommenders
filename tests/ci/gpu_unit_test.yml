@@ -33,8 +33,6 @@ pr:
 - staging 
 - master
 
-timeoutInMinutes: 120
-
 pool:
  vmImage: 'ubuntu-16.04'
 
